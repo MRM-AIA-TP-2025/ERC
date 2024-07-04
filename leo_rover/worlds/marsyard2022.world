@@ -4,7 +4,7 @@
 <!-- |    EDITING THIS FILE BY HAND IS NOT RECOMMENDED                                 | -->
 <!-- =================================================================================== -->
 <?xml-model href="http://sdformat.org/schemas/root.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
-<sdf version="1.9">
+<sdf version="1.7">
   <world name="marsyard2022">
     <physics type="ode">
       <ode>
@@ -16,7 +16,7 @@
       </ode>
     </physics>
     <light name="sun" type="directional">
-      <pose frame="">0 0 100 0 0 0.01</pose>
+      <pose>0 0 100 0 0 0.01</pose>
       <diffuse>1 1 1 1</diffuse>
       <specular>0.1 0.1 0.1 1</specular>
       <cast_shadows>1</cast_shadows>
@@ -33,7 +33,7 @@
       <origin_visual>false</origin_visual>
     </scene>
     <include>
-      <uri>model://marsyard2022_terrain</uri>
+      <uri>/home/dillon/myROS2WS/src/leo_rover/models/marsyard2022_terrain</uri>
     </include>
     <model name="landmark1">
       <pose>-7.003806999999998 7.617856 1.172268 0 0 0.0</pose>
@@ -70,7 +70,9 @@
             </box>
           </geometry>
           <material>
-            <script>
+              <script>
+              <uri>/home/dillon/myROS2WS/src/leo_rover/media/materials/scripts</uri>
+              <uri>/home/dillon/myROS2WS/src/leo_rover/media/materials/textures</uri>
               <name>ERC_Landmark/Box</name>
             </script>
           </material>
@@ -92,6 +94,8 @@
           </geometry>
           <material>
             <script>
+              <uri>/home/dillon/myROS2WS/src/leo_rover/media/materials/scripts</uri>
+              <uri>/home/dillon/myROS2WS/src/leo_rover/media/materials/textures</uri>
               <name>ERC_Landmark/1</name>
             </script>
           </material>
@@ -104,7 +108,7 @@
             </box>
           </geometry>
           <material>
-            <script>
+              <script>
               <name>ERC_Landmark/1</name>
             </script>
           </material>
@@ -117,7 +121,7 @@
             </box>
           </geometry>
           <material>
-            <script>
+              <script>
               <name>ERC_Landmark/1</name>
             </script>
           </material>
@@ -130,9 +134,9 @@
             </box>
           </geometry>
           <material>
-            <script>
-              <name>ERC_Landmark/1</name>
-            </script>
+              <script>
+                <name>ERC_Landmark/1</name>
+              </script>
           </material>
         </visual>
       </link>
