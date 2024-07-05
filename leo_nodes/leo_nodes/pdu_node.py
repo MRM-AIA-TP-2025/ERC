@@ -18,7 +18,7 @@ class PduNode(Node):
         self.declare_parameter('probe_model', '')
 
         self.probe_basename = 'probe'
-        self.spawn_reference_frame = 'leo::base_footprint'
+        self.spawn_reference_frame = 'base_footprint'
 
         pdu_translation = {'x': -0.195, 'y': 0.0, 'z': 0.12}
         self.pdu_pose = Pose(
@@ -29,8 +29,8 @@ class PduNode(Node):
         self.pdu_dropped_pub = self.create_publisher(UInt8, 'probe_deployment_unit/probes_dropped', 1)
         self.pdu_dropped_pub.publish(UInt8(data=self.probe_cnt))
 
-        self.spawn_probe_client = self.create_client(SpawnEntity, '/gazebo/spawn_entity')
-        self.delete_probe_client = self.create_client(DeleteEntity, '/gazebo/delete_entity')
+        self.spawn_probe_client = self.create_client(SpawnEntity, '/spawn_entity')
+        self.delete_probe_client = self.create_client(DeleteEntity, '/delete_entity')
 
         self.pdu_reset_srv = self.create_service(Trigger, 'probe_deployment_unit/home', self.pdu_reset)
         self.pdu_drop_sub = self.create_subscription(Empty, 'probe_deployment_unit/drop', self.pdu_callback, 1)
@@ -45,16 +45,30 @@ class PduNode(Node):
         except Exception as e:
             self.get_logger().error(f"Failed to read probe model file: {e}")
             self.probe_model = ''
+        print(self.probe_model)
+        # Wait for the service to be available
+        self.get_logger().info('Waiting for /spawn_entity service...')
+        self.spawn_probe_client.wait_for_service()
+        self.get_logger().info('/spawn_entity service is now available.')
 
-    def pdu_reset(self, req: Trigger.Request):
+        self.get_logger().info('Waiting for /delete_entity service...')
+        self.delete_probe_client.wait_for_service()
+        self.get_logger().info('/delete_entity service is now available.')
+
+    def pdu_reset(self, req: Trigger.Request, res: Trigger.Response):
         for i in range(1, self.probe_cnt + 1):
             probe_name = f'{self.probe_basename}{i}'
-            self.delete_probe_client.call_async(DeleteEntity.Request(name=probe_name))
+            request = DeleteEntity.Request()
+            request.name = probe_name
+            future = self.delete_probe_client.call_async(request)
+            future.add_done_callback(self.delete_callback)
 
         self.probe_cnt = 0
         self.pdu_dropped_pub.publish(UInt8(data=self.probe_cnt))
 
-        return Trigger.Response(success=True, message="")
+        res.success = True
+        res.message = "Probes have been reset."
+        return res
 
     def pdu_callback(self, msg: Empty):
         if self.probe_cnt >= self.probe_number or not self.probe_model:
@@ -88,6 +102,13 @@ class PduNode(Node):
         except Exception as e:
             self.get_logger().error(f'Service call failed: {e}')
 
+    def delete_callback(self, future):
+        try:
+            response = future.result()
+            if not response.success:
+                self.get_logger().error(f"Failed to delete probe: {response.status_message}")
+        except Exception as e:
+            self.get_logger().error(f'Service call failed: {e}')
 
 
 def main(args=None):
