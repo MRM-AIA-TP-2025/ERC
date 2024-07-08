@@ -94,6 +94,7 @@
     name="pdu_node"
     output="screen"
     launch-prefix="gnome-terminal --">
+    <param name="probe_model" value="/home/dillon/myROS2WS/src/leo_rover/urdf/probe.urdf" />
   </node>
 
   <node

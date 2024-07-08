@@ -15,6 +15,17 @@
         </solver>
       </ode>
     </physics>
+    <plugin
+        filename="gz-sim-physics-system"
+        name="gz::sim::systems::Physics">
+    </plugin>
+    <plugin
+        filename="gz-sim-scene-broadcaster-system"
+        name="gz::sim::systems::SceneBroadcaster">
+    </plugin>
+    <plugin filename="gz-sim-imu-system"
+        name="gz::sim::systems::Imu">
+    </plugin>
     <light name="sun" type="directional">
       <pose>0 0 100 0 0 0.01</pose>
       <diffuse>1 1 1 1</diffuse>

@@ -483,17 +483,62 @@
       <forceConstant>100.0</forceConstant>
     </plugin>
   </gazebo>
+  <!--IMU-->
   <gazebo reference="imu_frame">
-    <sensor name="leo_imu_sensor" type="imu">
-      <update_rate>100</update_rate>
-      <plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
-        <robotNamespace>/</robotNamespace>
-        <topicName>imu/data_raw</topicName>
-        <frameName>imu_frame</frameName>
-        <updateRateHZ>100.0</updateRateHZ>
-        <gaussianNoise>0.01</gaussianNoise>
-        <initialOrientationAsReference>false</initialOrientationAsReference>
-      </plugin>
+  <sensor name="leo_imu_sensor" type="imu">
+        <always_on>true</always_on>
+        <update_rate>100</update_rate>
+        <topic>imu/data_raw</topic>
+        <imu>
+          <angular_velocity>
+            <x>
+              <noise type="gaussian">
+                <mean>0.0</mean>
+                <stddev>2e-4</stddev>
+              </noise>
+            </x>
+            <y>
+              <noise type="gaussian">
+                <mean>0.0</mean>
+                <stddev>2e-4</stddev>
+              </noise>
+            </y>
+            <z>
+              <noise type="gaussian">
+                <mean>0.0</mean>
+                <stddev>2e-4</stddev>
+              </noise>
+            </z>
+          </angular_velocity>
+          <linear_acceleration>
+            <x>
+              <noise type="gaussian">
+                <mean>0.0</mean>
+                <stddev>1.7e-2</stddev>
+              </noise>
+            </x>
+            <y>
+              <noise type="gaussian">
+                <mean>0.0</mean>
+                <stddev>1.7e-2</stddev>
+              </noise>
+            </y>
+            <z>
+              <noise type="gaussian">
+                <mean>0.0</mean>
+                <stddev>1.7e-2</stddev>
+              </noise>
+            </z>
+          </linear_acceleration>
+        </imu>
+        <plugin name="bytes_imu" filename="libgazebo_ros_imu_sensor.so">
+            <ros>
+                <namespace>imu</namespace>
+                <remapping>~/out:=data_raw</remapping>
+            </ros>
+            <frameName>imu_frame</frameName>
+            <initial_orientation_as_reference>false</initial_orientation_as_reference>
+        </plugin>
     </sensor>
   </gazebo>
   <!-- ros_control plugin -->
