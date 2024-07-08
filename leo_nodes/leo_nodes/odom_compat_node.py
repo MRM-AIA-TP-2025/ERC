@@ -20,7 +20,7 @@ class OdomCompatNode(Node):
         self.wheel_odom_pub = self.create_publisher(Odometry, 'wheel_odom_with_covariance', 1)
         self.wheel_odom_sub = self.create_subscription(
             Odometry,
-            'gazebo/controllers/diff_drive/odom',
+            '/odom',
             self.wheel_odom_callback,
             1
         )

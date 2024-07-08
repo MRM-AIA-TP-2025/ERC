@@ -477,10 +477,23 @@
   </gazebo>
   <!-- rocker differential -->
   <gazebo>
-    <plugin filename="libleo_gazebo_differential_plugin.so" name="rocker_differential">
-      <jointA>rocker_L_joint</jointA>
-      <jointB>rocker_R_joint</jointB>
-      <forceConstant>100.0</forceConstant>
+    <plugin filename="libgazebo_ros_diff_drive.so" name="skid_steer_drive_controller">
+      <num_wheel_pairs>2</num_wheel_pairs>
+      <left_joint>wheel_FL_joint</left_joint>
+      <left_joint>wheel_RL_joint</left_joint>
+      <right_joint>wheel_FR_joint</right_joint>
+      <right_joint>wheel_RR_joint</right_joint>
+      <robot_base_frame>base_footprint</robot_base_frame>
+      <max_wheel_torque>200.0</max_wheel_torque>
+      <max_wheel_acceleration>10.0</max_wheel_acceleration>
+      <ros>
+          <namespace>/</namespace>
+          <argument>/cmd_vel:=cmd_vel</argument>
+          <argument>/odom:=odom</argument>
+      </ros>
+      <publish_odom>true</publish_odom>
+      <publish_odom_tf>true</publish_odom_tf>
+      <update_rate>30.0</update_rate>
     </plugin>
   </gazebo>
   <!--IMU-->

@@ -39,12 +39,6 @@
   <node name="rviz" pkg="rviz2" exec="rviz2">
       <param name="use_sim_time" value="true" />
   </node>
-<!--
-  <node name="controller_spawner" 
-    pkg="controller_manager"
-    exec="spawner" output="screen"
-    args="gazebo/controllers/state gazebo/controllers/diff_drive"/>
-  -->
 
 
     <node name="rgbd_odometry"
@@ -57,11 +51,6 @@
       <remap from="rgb/camera_info" to="/zed2_left_camera/camera_info"/>
       <remap from="depth/image" to="/zed2_left_camera/depth/image_raw"/>
     </node>
-    <!-- Disable verbose output from rgbd_odometry node
-    <node name="set_rgbd_odometry_log_level"
-          pkg="ros2service"
-          exec="ros2service" output="screen"
-          args="call /rgbd_odometry/set_logger_level ros.rtabmap_ros warn"/>-->
 
 <!-- Launch cmd_vel_relay -->
   <node
@@ -79,13 +68,13 @@
     output="screen">
   </node>
 
-  <!-- Launch odom_compat_node -->
+  <!-- Launch odom_compat_node 
   <node
     pkg="leo_nodes"
     exec="odom_compat_node"
     name="odom_compat"
     output="screen">
-  </node>
+  </node>-->
 
   <!-- Launch pdu_node -->
   <node
