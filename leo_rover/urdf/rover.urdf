@@ -13,7 +13,7 @@
       <right_joint>right_wheel_hinge_back</right_joint>
       <wheel_separation>0.4</wheel_separation>
       <wheel_diameter>0.2</wheel_diameter>
-      <robot_base_frame>robot_footprint</robot_base_frame>
+      <robot_base_frame>base_link</robot_base_frame>
       <max_wheel_torque>200.0</max_wheel_torque>
       <max_wheel_acceleration>10.0</max_wheel_acceleration>
       <ros>
@@ -23,6 +23,7 @@
       </ros>
       <publish_odom>true</publish_odom>
       <publish_odom_tf>true</publish_odom_tf>
+      <publish_wheel_tf>true</publish_wheel_tf>
       <update_rate>30.0</update_rate>
     </plugin>
   </gazebo>
@@ -60,38 +61,37 @@
   </gazebo>
   <!-- lidar 2.3562-->
   <gazebo reference="lidar">
-    <sensor name="lidar_sensor" type="lidar">
-      <always_on>true</always_on>
-      <update_rate>50</update_rate>
-      <ray>
-        <scan>
-          <horizontal>
-            <samples>360</samples>
-            <min_angle>-2.3562</min_angle>
-            <max_angle>2.3562</max_angle>
-          </horizontal>
-        </scan>
-        <range>
-          <min>0.3</min>
-          <max>12</max>
-        </range>
-      </ray>
-      <visualize>false</visualize>
-      <topic>scan</topic>
-      <plugin filename="libgazebo_ros_laser.so" name="gazebo_ros_lidar">
-        <topicName>scan</topicName>
-        <frameName>lidar</frameName>
-        <fov>1.5708</fov>
-        <min_range>0.02</min_range>
-        <max_range>30.0</max_range>
-        <horizontalSamples>720</horizontalSamples>
-        <verticalSamples>1</verticalSamples>
-        <pointsPerRay>1</pointsPerRay>
-        <laserNoise>0.01</laserNoise>
-      </plugin>
-      <pose>0 0 0 0 0 0</pose>
-    </sensor>
-  </gazebo>
+        <material>Gazebo/Blue</material>
+
+        <sensor name="laser" type="ray">
+            <pose> 0 0 0 0 0 0 </pose>
+            <visualize>true</visualize>
+            <update_rate>10</update_rate>
+            <ray>
+                <scan>
+                    <horizontal>
+                        <samples>360</samples>
+                        <min_angle>-3.14</min_angle>
+                        <max_angle>3.14</max_angle>
+                    </horizontal>
+                </scan>
+                <range>
+                    <min>0.3</min>
+                    <max>12</max>
+                </range>
+            </ray>
+
+            <plugin name="laser_controller" filename="libgazebo_ros_ray_sensor.so">
+                <ros>
+                    <remapping>~/out:=scan</remapping>
+                </ros>
+                <output_type>sensor_msgs/LaserScan</output_type>
+                <frame_name>lidar</frame_name>
+            </plugin>
+        </sensor>
+
+    </gazebo>
+    
   <!-- imu -->
   <gazebo reference="imu">
     <sensor name="br_imu" type="imu">
@@ -226,8 +226,8 @@
   <material name="red">
     <color rgba="1 0 0 1"/>
   </material>
-  <!-- Chassis -->
-  <link name="chassis">
+  <!-- base_link-->
+  <link name="base_link">
     <pose>0 0 0.1 0 0 0</pose>
     <inertial>
       <mass value="7"/>
@@ -248,6 +248,18 @@
       <material name="blue"/>
     </visual>
   </link>
+
+ <!-- BASE_FOOTPRINT LINK -->
+
+    <joint name="base_footprint_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="base_footprint"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+    </joint>
+
+    <link name="base_footprint">
+    </link>
+
   <!-- Right Wheel Back -->
   <link name="right_wheel_back">
     <inertial>
@@ -443,7 +455,7 @@
   <!-- Right Wheel Joint Back-->
   <joint name="right_wheel_hinge_back" type="continuous">
     <origin rpy="0 0 0" xyz="-0.2 -0.30 0"/>
-    <parent link="chassis"/>
+    <parent link="base_link"/>
     <child link="right_wheel_back"/>
     <axis rpy="0 0 0" xyz="0 1 0"/>
     <limit effort="10000" velocity="1000"/>
@@ -452,7 +464,7 @@
   <!-- Right Wheel Joint Front-->
   <joint name="right_wheel_hinge_front" type="continuous">
     <origin rpy="0 0 0" xyz="0.2 -0.30 0"/>
-    <parent link="chassis"/>
+    <parent link="base_link"/>
     <child link="right_wheel_front"/>
     <axis rpy="0 0 0" xyz="0 1 0"/>
     <limit effort="10000" velocity="1000"/>
@@ -461,7 +473,7 @@
   <!-- Left Wheel Joint Back-->
   <joint name="left_wheel_hinge_back" type="continuous">
     <origin rpy="0 0 0" xyz="-0.2 0.30 0"/>
-    <parent link="chassis"/>
+    <parent link="base_link"/>
     <child link="left_wheel_back"/>
     <axis rpy="0 0 0" xyz="0 1 0"/>
     <limit effort="10000" velocity="1000"/>
@@ -470,7 +482,7 @@
   <!-- Left Wheel Joint Front-->
   <joint name="left_wheel_hinge_front" type="continuous">
     <origin rpy="0 0 0" xyz="0.2 0.30 0"/>
-    <parent link="chassis"/>
+    <parent link="base_link"/>
     <child link="left_wheel_front"/>
     <axis rpy="0 0 0" xyz="0 1 0"/>
     <limit effort="10000" velocity="1000"/>
@@ -479,14 +491,14 @@
   <!-- Camera Joint -->
   <joint name="camera_joint" type="fixed">
     <origin rpy="0 0 0" xyz="0.28 0 0.1"/>
-    <parent link="chassis"/>
+    <parent link="base_link"/>
     <child link="camera"/>
     <axis xyz="0 1 0"/>
   </joint>
   <!-- Zed2 Joint -->
   <joint name="zed2_joint" type="fixed">
     <origin rpy="0 0 0" xyz="0.28 0 0.0"/>
-    <parent link="chassis"/>
+    <parent link="base_link"/>
     <child link="zed2_camera"/>
     <axis xyz="0 1 0"/>
   </joint>
@@ -499,24 +511,24 @@
   <!-- Lidar Joint -->
   <joint name="lidar_joint" type="fixed">
     <origin rpy="0 0 0" xyz="0.2 0 0.17"/>
-    <parent link="chassis"/>
+    <parent link="base_link"/>
     <child link="lidar"/>
     <axis xyz="0 1 0"/>
   </joint>
   <joint name="robot_footprint_joint" type="fixed">
     <origin rpy="0 0 0" xyz="0 0 0"/>
     <parent link="robot_footprint"/>
-    <child link="chassis"/>
+    <child link="base_link"/>
   </joint>
   <!--IMU Joint -->
   <joint name="imu_joint" type="fixed">
-    <parent link="chassis"/>
+    <parent link="base_link"/>
     <child link="imu"/>
     <origin xyz="0 0 0.17"/>
   </joint>
   <!--GPS Joint-->
   <joint name="gps_joint" type="fixed">
-    <parent link="chassis"/>
+    <parent link="base_link"/>
     <child link="gps"/>
     <origin xyz="0 0 0.22"/>
   </joint>
@@ -576,7 +588,7 @@
   <gazebo reference="imu">
     <material>Gazebo/White</material>
   </gazebo>
-  <gazebo reference="chassis">
+  <gazebo reference="base_link">
     <material>Gazebo/Blue</material>
   </gazebo>
 </robot>

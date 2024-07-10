@@ -653,7 +653,7 @@
         <cameraName>zed2/left_raw</cameraName>
         <imageTopicName>image_raw_color</imageTopicName>
         <cameraInfoTopicName>camera_info</cameraInfoTopicName>
-        <frameName>zed2_left_camera_optical_frame</frameName>
+        <frame_name>zed2_left_camera_optical_frame</frame_name>
         <distortionK1>-0.043693598</distortionK1>
         <distortionK2>0.0146164996</distortionK2>
         <distortionT1>-0.006573319</distortionT1>
@@ -697,7 +697,7 @@
         <pointCloudTopicName>point_cloud/cloud_registered</pointCloudTopicName>
         <pointCloudCutoff>0.3</pointCloudCutoff>
         <pointCloudCutoffMax>20.0</pointCloudCutoffMax>
-        <frameName>zed2_left_camera_optical_frame</frameName>
+        <frame_name>zed2_left_camera_optical_frame</frame_name>
         <baseline>0.12</baseline>
         <CxPrime>658.8206787109375</CxPrime>
         <Cx>658.8206787109375</Cx>
@@ -816,4 +816,61 @@
       <updateRate>30.0</updateRate>
     </plugin>
   </gazebo>
+
+  <!-- lidar  -->
+  <link name="lidar">
+    <inertial>
+      <mass value="1e-05"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <inertia ixx="1e-6" ixy="0.0" ixz="0.0" iyy="1e-6" iyz="0.0" izz="1e-6"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <cylinder length="0.08" radius="0.06"/>
+      </geometry>
+      <material name="black"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <cylinder length="0.08" radius="0.06"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="lidar_joint" type="fixed">
+    <origin rpy="0 0 0" xyz="0.2 0 0.17"/>
+    <parent link="rocker_L_link"/>
+    <child link="lidar"/>
+    <axis xyz="0 1 0"/>
+  </joint>
+  <gazebo reference="lidar">
+        <sensor name="laser" type="ray">
+            <pose> 0 0 0 0 0 0 </pose>
+            <visualize>true</visualize>
+            <update_rate>10</update_rate>
+            <ray>
+                <scan>
+                    <horizontal>
+                        <samples>360</samples>
+                        <min_angle>-3.14</min_angle>
+                        <max_angle>3.14</max_angle>
+                    </horizontal>
+                </scan>
+                <range>
+                    <min>0.3</min>
+                    <max>12</max>
+                </range>
+            </ray>
+
+            <plugin name="laser_controller" filename="libgazebo_ros_ray_sensor.so">
+                <ros>
+                    <remapping>~/out:=scan</remapping>
+                </ros>
+                <output_type>sensor_msgs/LaserScan</output_type>
+                <frame_name>zed2_left_camera_frame</frame_name>
+            </plugin>
+        </sensor>
+
+    </gazebo>
 </robot>

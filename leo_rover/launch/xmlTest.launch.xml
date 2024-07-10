@@ -4,14 +4,14 @@
    
   <!-- Set the path to this package -->
   <!-- $(find-pkg-share leo_rover) not working!!!!!! -->
-  <!-- <arg name="pkg_share" default="/home/dillon/myROS2WS/src/leo_rover" /> -->
-  <arg name="pkg_share" default="/home/dillon/myROS2WS/src/leo_rover" />
+  <!-- <arg name="leo_rover_package" default="/home/dillon/myROS2WS/src/leo_rover" /> -->
+  <arg name="leo_rover_package" default="/home/dillon/myROS2WS/src/leo_rover" />
   <!-- Set the path to the world file -->
   <arg name="world_file_name" default="marsyard2022.world" />
-  <arg name="world_path" default="$(var pkg_share)/worlds/$(var world_file_name)" />
+  <arg name="world_path" default="$(var leo_rover_package)/worlds/$(var world_file_name)" />
    
   <!-- Set the path to the SDF model files -->
-  <arg name="gazebo_models_path" default="$(var pkg_share)/models/marsyard2022_terrain" />
+  <arg name="gazebo_models_path" default="$(var leo_rover_package)/models/marsyard2022_terrain" />
    
   <arg name="world" default="$(var world_path)" />
  
@@ -23,7 +23,7 @@
   <!-- Start Gazebo client -->
   <include file="$(var pkg_gazebo_ros)/launch/gzclient.launch.py" />
 
-  <arg name="model" default="/home/dillon/myROS2WS/src/leo_rover/urdf/leo_erc_sim.urdf" />
+  <arg name="model" default="$(var leo_rover_package)/urdf/leo_erc_sim.urdf" />
 
     <!-- Spawn robot in Gazebo -->
   <node name="spawn_robot_urdf" pkg="gazebo_ros" exec="spawn_entity.py"
@@ -39,9 +39,7 @@
   <node name="rviz" pkg="rviz2" exec="rviz2">
       <param name="use_sim_time" value="true" />
   </node>
-
-
-    <node name="rgbd_odometry"
+  <node name="rgbd_odometry"
         pkg="rtabmap_odom"
         exec="rgbd_odometry" output="screen" launch-prefix="gnome-terminal --">
         <param name="frame_id" value="base_link"/>
@@ -50,7 +48,26 @@
       <remap from="rgb/image" to="/zed2_left_camera/image_raw"/>
       <remap from="rgb/camera_info" to="/zed2_left_camera/camera_info"/>
       <remap from="depth/image" to="/zed2_left_camera/depth/image_raw"/>
-    </node>
+      </node>
+
+  <node name="rtabmap" pkg="rtabmap_slam" exec="rtabmap" output="screen" launch-prefix="gnome-terminal --">
+    <remap from="rgb/image" to="/zed2_left_camera/image_raw"/>
+    <remap from="rgb/camera_info" to="/zed2_left_camera/camera_info"/>
+    <remap from="depth/image" to="/zed2_left_camera/depth/image_raw"/>
+    <remap from="/rgbd_image" to="/odom_rgbd_image"/>
+    <param name="frame_id" value="base_link"/>
+    <param name="subscribe_depth" value = "false"/>
+    <param name="subscribe_rgbd" value="true"/>
+  </node>
+<!--
+<node pkg="depthimage_to_laserscan" exec="depthimage_to_laserscan_node" name="depthimage_to_laserscan" output="screen">
+    <param name="range_min" value="0.5" />
+    <param name="range_max" value="10.0" />
+    <param name="scan_height" value="10" />
+    <param name="output_frame" value="zed2_left_camera_optical_frame" />
+    <remap from="depth/image_rect_raw" to="/zed2_left_camera/depth/image_raw"/>
+    <remap from="scan" to="/scan" />
+  </node>-->
 
 <!-- Launch cmd_vel_relay -->
   <node
@@ -83,7 +100,7 @@
     name="pdu_node"
     output="screen"
     launch-prefix="gnome-terminal --">
-    <param name="probe_model" value="/home/dillon/myROS2WS/src/leo_rover/urdf/probe.urdf" />
+    <param name="probe_model" value="$(var leo_rover_package)/urdf/probe.urdf" />
   </node>
 
   <node
@@ -92,5 +109,12 @@
     name="zed2_imu_transform_broadcaster"
     output="screen">
   </node>
+
+  <node name="ekf_localization_node"
+        pkg="robot_localization"
+        exec="ekf_node" output="screen" launch-prefix="gnome-terminal --">
+        <param name="use_sim_time" value="true"/>
+        <param name="params_file" value="$(var leo_rover_package)/config/ekf_localization.yaml"/>
+    </node>
 
 </launch>

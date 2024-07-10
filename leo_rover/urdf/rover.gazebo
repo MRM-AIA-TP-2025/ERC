@@ -2,36 +2,27 @@
 <robot>
 
   <gazebo>
-    
-    <plugin name="skid_steer_drive_controller" filename="libgazebo_ros_skid_steer_drive.so">
-      <updateRate>10.0</updateRate>
-      <robotNamespace>/</robotNamespace>
-      <leftFrontJoint>left_wheel_hinge_front</leftFrontJoint>
-      <rightFrontJoint>right_wheel_hinge_front</rightFrontJoint>
-      <leftRearJoint>left_wheel_hinge_back</leftRearJoint>
-      <rightRearJoint>right_wheel_hinge_back</rightRearJoint>
-      <wheelSeparation>0.4</wheelSeparation>
-      <wheelDiameter>0.2</wheelDiameter>
-      <robotBaseFrame>robot_footprint</robotBaseFrame>
-      <torque>10</torque>
-
-      <topicName>cmd_vel</topicName>
-      <odometryTopic>drive/odom</odometryTopic>
-      <odometryFrame>odom</odometryFrame>
-
-      <commandTopic>cmd_vel</commandTopic>
-      <topic_name_twist>cmd_vel</topic_name_twist>
-      <topic_name_odometry>drive/odom</topic_name_odometry>
-      <topic_name_joint>joint</topic_name_joint>
-
-      <broadcastTF>true</broadcastTF>
-
-      <covariance_x>0.0001</covariance_x>
-      <covariance_y>0.0001</covariance_y>
-      <covariance_yaw>0.01</covariance_yaw>
-
+    <plugin filename="libgazebo_ros_diff_drive.so" name="skid_steer_drive_controller">
+      <num_wheel_pairs>2</num_wheel_pairs>
+      <left_joint>left_wheel_hinge_front</left_joint>
+      <left_joint>left_wheel_hinge_back</left_joint>
+      <right_joint>right_wheel_hinge_front</right_joint>
+      <right_joint>right_wheel_hinge_back</right_joint>
+      <wheel_separation>0.4</wheel_separation>
+      <wheel_diameter>0.2</wheel_diameter>
+      <robot_base_frame>base_link</robot_base_frame>
+      <max_wheel_torque>200.0</max_wheel_torque>
+      <max_wheel_acceleration>10.0</max_wheel_acceleration>
+      <ros>
+          <namespace>/</namespace>
+          <argument>/cmd_vel:=cmd_vel</argument>
+          <argument>/odom:=odom</argument>
+      </ros>
+      <publish_odom>true</publish_odom>
+      <publish_odom_tf>true</publish_odom_tf>
+      <publish_wheel_tf>true</publish_wheel_tf>
+      <update_rate>30.0</update_rate>
     </plugin>
-
   </gazebo>
 
   <!-- camera -->
@@ -69,37 +60,32 @@
 
   <!-- lidar 2.3562-->
 <gazebo reference="lidar">
-  <sensor name="lidar_sensor" type="lidar">
-    <always_on>true</always_on>
-    <update_rate>50</update_rate>
-    <ray>
-      <scan>
-          <horizontal>
-              <samples>360</samples>
-              <min_angle>-2.3562</min_angle>
-              <max_angle>2.3562</max_angle>
-          </horizontal>
-      </scan>
-      <range>
-          <min>0.3</min>
-          <max>12</max>
-      </range>
-    </ray>
-    <visualize>false</visualize>
-    <topic>scan</topic>
-    <plugin filename="libgazebo_ros_laser.so" name="gazebo_ros_lidar">
-      <topicName>scan</topicName>
-      <frameName>lidar</frameName>
-      <fov>1.5708</fov>
-      <min_range>0.02</min_range>
-      <max_range>30.0</max_range>
-      <horizontalSamples>720</horizontalSamples>
-      <verticalSamples>1</verticalSamples>
-      <pointsPerRay>1</pointsPerRay>
-      <laserNoise>0.01</laserNoise>
-    </plugin>
-    <pose>0 0 0 0 0 0</pose>
-  </sensor>
+        <sensor name="laser" type="ray">
+            <pose> 0 0 0 0 0 0 </pose>
+            <visualize>true</visualize>
+            <update_rate>10</update_rate>
+            <ray>
+                <scan>
+                    <horizontal>
+                        <samples>360</samples>
+                        <min_angle>-3.14</min_angle>
+                        <max_angle>3.14</max_angle>
+                    </horizontal>
+                </scan>
+                <range>
+                    <min>0.3</min>
+                    <max>12</max>
+                </range>
+            </ray>
+
+            <plugin name="laser_controller" filename="libgazebo_ros_ray_sensor.so">
+                <ros>
+                    <remapping>~/out:=scan</remapping>
+                </ros>
+                <output_type>sensor_msgs/LaserScan</output_type>
+                <frame_name>laser_frame</frame_name>
+            </plugin>
+        </sensor>
 </gazebo>
 
   <!-- imu -->

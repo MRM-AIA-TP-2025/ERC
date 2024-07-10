@@ -6,24 +6,15 @@
   <!-- $(find-pkg-share leo_rover) not working!!!!!! -->
   <arg name="leo_rover_pkg" default="/home/dillon/myROS2WS/src/leo_rover" />
    
-  <!-- Set the path to the world file -->
-  <arg name="world_file_name" default="marsyard2022.world" />
-  <arg name="world_path" default="$(var leo_rover_pkg)/worlds/$(var world_file_name)" />
-   
-  <!-- Set the path to the SDF model files -->
-  <arg name="gazebo_models_path" default="$(var leo_rover_pkg)/models/marsyard2022_terrain" />
-   
-  <arg name="world" default="$(var world_path)" />
  
   <!-- Start Gazebo server -->
   <include file="$(var pkg_gazebo_ros)/launch/gzserver.launch.py">
-    <arg name="world" value="$(var world)" />
   </include>
  
   <!-- Start Gazebo client -->
   <include file="$(var pkg_gazebo_ros)/launch/gzclient.launch.py" />
 
-  <arg name="model" default="$(var leo_rover_pkg)/urdf/leo_erc_sim.urdf" />
+  <arg name="model" default="$(var leo_rover_pkg)/urdf/rover.urdf" />
 
   <!-- Spawn robot in Gazebo -->
   <node name="spawn_robot_urdf" pkg="gazebo_ros" exec="spawn_entity.py"
@@ -40,4 +31,10 @@
       <param name="use_sim_time" value="true" />
   </node>
 
+  <node name="nav2_bringup"
+        pkg="nav2_bringup"
+        exec="bringup_launch.py" output="screen">
+        <param name="use_sim_time" value="false"/>
+        <param name="params_file" value="$(var leo_rover_pkg)/config/nav2_params.yaml"/>
+    </node>
 </launch>
