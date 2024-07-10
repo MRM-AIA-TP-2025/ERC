@@ -839,7 +839,7 @@
     </collision>
   </link>
   <joint name="lidar_joint" type="fixed">
-    <origin rpy="0 0 0" xyz="0.2 0 0.17"/>
+    <origin rpy="0 0 2.792527" xyz="0.2 0 0.17"/>
     <parent link="rocker_L_link"/>
     <child link="lidar"/>
     <axis xyz="0 1 0"/>

@@ -59,15 +59,11 @@
     <param name="subscribe_depth" value = "false"/>
     <param name="subscribe_rgbd" value="true"/>
   </node>
-<!--
-<node pkg="depthimage_to_laserscan" exec="depthimage_to_laserscan_node" name="depthimage_to_laserscan" output="screen">
-    <param name="range_min" value="0.5" />
-    <param name="range_max" value="10.0" />
-    <param name="scan_height" value="10" />
-    <param name="output_frame" value="zed2_left_camera_optical_frame" />
-    <remap from="depth/image_rect_raw" to="/zed2_left_camera/depth/image_raw"/>
-    <remap from="scan" to="/scan" />
-  </node>-->
+<node name="depthtolaser" pkg="depthimage_to_laserscan" exec="depthimage_to_laserscan_node" output="screen">
+    <remap from="depth" to="/zed2_left_camera/depth/image_raw"/>
+    <remap from="depth_camera_info" to="/zed2_left_camera/camera_info"/>
+    <param name="output_frame" value="zed2_left_camera_frame"/>
+  </node>
 
 <!-- Launch cmd_vel_relay -->
   <node

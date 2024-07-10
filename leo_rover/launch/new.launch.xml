@@ -3,19 +3,19 @@
     <arg name="leo_rover_package" default="/home/dillon/myROS2WS/src/leo_rover" />
     <arg name="model" default="$(var leo_rover_package)/urdf/leo_erc_sim.urdf" />
 
-    <!-- Set the path to the world file -->
+    <!-- Set the path to the world file 
     <arg name="world_file_name" default="marsyard2022.world" />
     <arg name="world_path" default="$(var leo_rover_package)/worlds/$(var world_file_name)" />
     <arg name="world" default="$(var world_path)" />
-    
-    <!-- Set the path to the SDF model files -->
+    -->
+    <!-- Set the path to the SDF model files 
     <arg name="gazebo_models_path" default="$(var leo_rover_package)/models/marsyard2022_terrain" />
     
-    
+    -->
 
     <!-- Start Gazebo server -->
     <include file="$(var pkg_gazebo_ros)/launch/gzserver.launch.py">
-    <arg name="world" value="$(var world)" />
+    <!--<arg name="world" value="$(var world)" />-->
     </include>
 
     <!-- Start Gazebo client -->
@@ -89,22 +89,35 @@
     name="zed2_imu_transform_broadcaster"
     output="screen">
   </node>
+  <node name="ekf_localization_node"
+        pkg="robot_localization"
+        exec="ekf_node" output="screen">
+        <param name="use_sim_time" value="true"/>
+        <param name="params_file" value="/home/dillon/myROS2WS/src/leo_rover/params/nav2_params.yaml"/>
+    </node>
+  <node name="amcl" pkg="nav2_amcl" exec="amcl" output="screen">
+    <param name ="use_sim_time" value="true"/>
+    <param name ="base_frame_id" value="base_link"/>
+    <param name ="global_frame_id" value="map"/>
+    <param name ="odom_frame_id" value="odom"/>
+    <param name ="max_particles" value="2000"/>
+    <param name ="min_particles" value="500"/>
+    <param name ="update_min_a" value="0.2"/>
+    <param name ="update_min_d" value="0.25"/>
+  </node>
+  <!--
+  <node name="depthtolaser" pkg="depthimage_to_laserscan" exec="depthimage_to_laserscan_node" output="screen">
+    <remap from="depth" to="/zed2_left_camera/depth/image_raw"/>
+    <remap from="depth_camera_info" to="/zed2_left_camera/camera_info"/>
+    <param name="output_frame" value="zed2_left_camera_frame"/>
+    <param name="scan_height" value = "10"/>
+  </node>
+
     <node name="ekf_localization_node"
         pkg="robot_localization"
         exec="ekf_node" output="screen">
         <param name="use_sim_time" value="true"/>
         <param name="params_file" value="$(var leo_rover_package)/config/ekf_localization.yaml"/>
-    </node>
-<!--
-
-    <node pkg="pointcloud_to_laserscan" exec="pointcloud_to_laserscan_node" name="pointcloud_to_laserscan">
-        <remap from="cloud_in" to="/zed2_left_camera/points" />
-        <remap from="scan" to="/scan" />
-        <param name="scan_time" value="0.1" />
-        <param name="range_min" value="0.1" />
-        <param name="range_max" value="10.0" />
-
-        <param name="angle_increment" value="0.01" />
     </node>-->
 
 </launch>
