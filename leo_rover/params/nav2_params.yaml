@@ -37,41 +37,6 @@ amcl:
     z_max: 0.05
     z_rand: 0.5
     z_short: 0.05
-    scan_topic: scan
-
-ekf_localization:
-  ros__parameters:
-    use_sim_time: True
-    frequency: 30.0
-    sensor_timeout: 0.1
-    two_d_mode: True
-    publish_tf: True
-    publish_acceleration: False
-    map_frame: "map"
-    odom_frame: "odom"
-    base_link_frame: "base_footprint"
-    world_frame: "odom"
-    odom0: "/odom"
-    odom0_config: [false, false, false, false, false, false, true, true, true, false, false, true, false, false, false]
-    odom0_queue_size: 10
-    odom0_nodelay: False
-    odom0_differential: True
-    odom0_relative: False
-    imu0: "/imu/data_raw"
-    imu0_config: [false, false, false, false, false, true, false, false, false, true, true, false, true, false, false]
-    imu0_queue_size: 10
-    imu0_nodelay: False
-    imu0_differential: False
-    imu0_relative: True
-    imu0_remove_gravitational_acceleration: True
-    use_control: False
-    stamped_control: False
-    control_config: [true, false, false, false, false, true]
-    control_timeout: 0.2
-    acceleration_limits: [0.5, 0.0, 0.0]
-    deceleration_limits: [0.5, 0.0, 0.0]
-    acceleration_gains: [0.5, 0.0, 0.0]
-    deceleration_gains: [0.5, 0.0, 0.0]
 
 bt_navigator:
   ros__parameters:
@@ -157,7 +122,7 @@ controller_server:
     # Progress checker parameters
     progress_checker:
       plugin: "nav2_controller::SimpleProgressChecker"
-      required_movement_radius: 1.5
+      required_movement_radius: 0.5
       movement_time_allowance: 10.0
     # Goal checker parameters
     #precise_goal_checker:
@@ -225,35 +190,16 @@ local_costmap:
       width: 10
       height: 10
       resolution: 0.05
-      robot_radius: 20.0
-      plugins: ["voxel_layer", "inflation_layer"]
+      robot_radius: 0.22
+      plugins: ["static_layer","inflation_layer"]
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
         cost_scaling_factor: 3.0
         inflation_radius: 0.55
-      voxel_layer:
-        plugin: "nav2_costmap_2d::VoxelLayer"
-        enabled: True
-        publish_voxel_map: True
-        origin_z: 0.0
-        z_resolution: 0.05
-        z_voxels: 16
-        max_obstacle_height: 2.0
-        mark_threshold: 0
-        observation_sources: scan
-        scan:
-          topic: /scan
-          max_obstacle_height: 2.0
-          clearing: True
-          marking: True
-          data_type: "LaserScan"
-          raytrace_max_range: 3.0
-          raytrace_min_range: 0.0
-          obstacle_max_range: 2.5
-          obstacle_min_range: 0.0
       static_layer:
         plugin: "nav2_costmap_2d::StaticLayer"
         map_subscribe_transient_local: True
+        map_topic: /octomap_grid
       always_send_full_costmap: True
 
 global_costmap:
@@ -265,33 +211,20 @@ global_costmap:
       robot_base_frame: base_link
       use_sim_time: True
       rolling_window: true
-      robot_radius: 20.0
+      robot_radius: 0.22
       resolution: 0.05
       width: 100
       height: 100
       track_unknown_space: true
-      plugins: ["static_layer", "obstacle_layer", "inflation_layer"]
-      obstacle_layer:
-        plugin: "nav2_costmap_2d::ObstacleLayer"
-        enabled: True
-        observation_sources: scan
-        scan:
-          topic: /scan
-          max_obstacle_height: 2.0
-          clearing: True
-          marking: True
-          data_type: "LaserScan"
-          raytrace_max_range: 3.0
-          raytrace_min_range: 0.0
-          obstacle_max_range: 2.5
-          obstacle_min_range: 0.0
+      plugins: ["static_layer", "inflation_layer"]
       static_layer:
         plugin: "nav2_costmap_2d::StaticLayer"
         map_subscribe_transient_local: True
+        map_topic: /octomap_grid
       inflation_layer:
         plugin: "nav2_costmap_2d::InflationLayer"
-        cost_scaling_factor: 4.0
-        inflation_radius: 0.2
+        cost_scaling_factor: 3.0
+        inflation_radius: 0.55
       always_send_full_costmap: True
 
 map_server:

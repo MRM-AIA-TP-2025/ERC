@@ -817,7 +817,7 @@
     </plugin>
   </gazebo>
 
-  <!-- lidar  
+  <!-- lidar  -->
   <link name="lidar">
     <inertial>
       <mass value="1e-05"/>
@@ -872,5 +872,5 @@
             </plugin>
         </sensor>
 
-    </gazebo>-->
+    </gazebo>
 </robot>

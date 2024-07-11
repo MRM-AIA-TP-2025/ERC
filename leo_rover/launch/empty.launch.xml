@@ -14,7 +14,7 @@
   <!-- Start Gazebo client -->
   <include file="$(var pkg_gazebo_ros)/launch/gzclient.launch.py" />
 
-  <arg name="model" default="$(var leo_rover_pkg)/urdf/rover.urdf" />
+  <arg name="model" default="$(var leo_rover_pkg)/urdf/leo_erc_sim.urdf" />
 
   <!-- Spawn robot in Gazebo -->
   <node name="spawn_robot_urdf" pkg="gazebo_ros" exec="spawn_entity.py"
@@ -30,11 +30,4 @@
   <node name="rviz" pkg="rviz2" exec="rviz2">
       <param name="use_sim_time" value="true" />
   </node>
-
-  <node name="nav2_bringup"
-        pkg="nav2_bringup"
-        exec="bringup_launch.py" output="screen">
-        <param name="use_sim_time" value="false"/>
-        <param name="params_file" value="$(var leo_rover_pkg)/config/nav2_params.yaml"/>
-    </node>
 </launch>
