@@ -28,8 +28,8 @@
     <param name="robot_description" value="$(command 'cat $(var model)')"/>
     <param name="use_sim_time" value="true" />
     </node>
-
-    <node name="rgbd_odometry" pkg="rtabmap_odom" exec="rgbd_odometry" output="screen" launch-prefix="gnome-terminal --">
+<!-- 
+    <node name="rgbd_odometry" pkg="rtabmap_odom" exec="rgbd_odometry" output="screen">
       <param name="frame_id" value="base_link"/>
       <param name="odom_frame_id" value="odom"/>
       <param name="publish_tf" value="true"/>
@@ -37,19 +37,22 @@
       <remap from="rgb/image" to="/zed2_left_camera/image_raw"/>
       <remap from="rgb/camera_info" to="/zed2_left_camera/camera_info"/>
       <remap from="depth/image" to="/zed2_left_camera/depth/image_raw"/>
+      <param name="approx_sync" value="true"/>
     </node>
-
+-->
     <node name="rtabmap" pkg="rtabmap_slam" exec="rtabmap" output="screen" launch-prefix="gnome-terminal --">
       <remap from="rgb/image" to="/zed2_left_camera/image_raw"/>
       <remap from="rgb/camera_info" to="/zed2_left_camera/camera_info"/>
       <remap from="depth/image" to="/zed2_left_camera/depth/image_raw"/>
       <remap from="/rgbd_image" to="/odom_rgbd_image"/>
+      <remap from="/imu" to="/imu/data_raw"/>
       <param name="frame_id" value="base_link"/>
-      <param name="subscribe_depth" value = "false"/>
-      <param name="subscribe_rgbd" value="true"/>
+      <param name="subscribe_depth" value = "true"/>
+      <param name="subscribe_rgbd" value="false"/>
       <param name="approx_sync" value="true"/>
       <param name="Rtabmap/PublishOccupancyGrid" value="true"/>
       <param name="use_sim_time" value="true" />
+      <param name="subscribe_imu" value="true"/>
     </node>
 
     <!-- Navigation stack -->
@@ -96,5 +99,5 @@
     name="zed2_imu_transform_broadcaster"
     output="screen">
   </node>
-
+  
 </launch>

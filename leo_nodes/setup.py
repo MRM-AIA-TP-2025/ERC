@@ -13,8 +13,8 @@ setup(
     ],
     install_requires=['setuptools'],
     zip_safe=True,
-    maintainer='akshat',
-    maintainer_email='akshat@todo.todo',
+    maintainer='dillon',
+    maintainer_email='dillon.mitmpl2022@learner.manipal.edu',
     description='TODO: Package description',
     license='TODO: License declaration',
     tests_require=['pytest'],
@@ -27,7 +27,6 @@ setup(
             'cmd_vel_relay = leo_nodes.cmd_vel_relay:main',
             'zed2_imu_transform_publisher = leo_nodes.zed2_imu_transform_publisher:main',
             'pcl = leo_nodes.pcl:main',
-            'navigation_controller = leo_nodes.navigation_control:main'
         ],
 
     },
