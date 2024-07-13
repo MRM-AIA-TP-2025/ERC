@@ -26,7 +26,7 @@ setup(
             'zed2_imu_transform_broadcaster = leo_nodes.zed2_imu_transform_broadcaster:main',
             'cmd_vel_relay = leo_nodes.cmd_vel_relay:main',
             'zed2_imu_transform_publisher = leo_nodes.zed2_imu_transform_publisher:main',
-            'pcl = leo_nodes.pcl:main',
+            'navigation_controller = leo_nodes.navigation_control:main',
         ],
 
     },
