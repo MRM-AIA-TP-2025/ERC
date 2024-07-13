@@ -58,7 +58,7 @@ class GoalSetterNode(Node):
             current_y = transform.transform.translation.y
             current_z = transform.transform.translation.z
             
-            goal = self.goals[current_goal_index]  # Get the last sent goal
+            goal = self.goals[self.current_goal_index]  # Get the last sent goal
             
             goal_x = goal['position']['x']
             goal_y = goal['position']['y']
@@ -67,7 +67,7 @@ class GoalSetterNode(Node):
             # Calculate distance or use a threshold to determine if goal is reached
             distance_to_goal = ((current_x - goal_x)**2 + (current_y - goal_y)**2 + (current_z - goal_z)**2)**0.5
             
-            if distance_to_goal < 1:  # Adjust threshold as needed
+            if distance_to_goal < 1.5:  # Adjust threshold as needed
                 self.get_logger().info('Goal reached!')
                 self.current_goal_index += 1
         
