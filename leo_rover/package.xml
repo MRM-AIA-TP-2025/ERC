@@ -4,7 +4,7 @@
   <name>leo_rover</name>
   <version>0.0.0</version>
   <description>TODO: Package description</description>
-  <maintainer email="dillon.mitmpl2022@learner.manipal.edu">dillon</maintainer>
+  <maintainer email="akshat@todo.todo">akshat</maintainer>
   <license>TODO: License declaration</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>

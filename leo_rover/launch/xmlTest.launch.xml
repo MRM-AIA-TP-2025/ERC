@@ -4,8 +4,8 @@
    
   <!-- Set the path to this package -->
   <!-- $(find-pkg-share leo_rover) not working!!!!!! -->
-  <!-- <arg name="leo_rover_package" default="/home/dillon/myROS2WS/src/leo_rover" /> -->
-  <arg name="leo_rover_package" default="/home/dillon/myROS2WS/src/leo_rover" />
+  <!-- <arg name="leo_rover_package" default="/home/akshat/ros2_ws/src/leo_rover" /> -->
+  <arg name="leo_rover_package" default="/home/akshat/ros2_ws/src/leo_rover" />
   <!-- Set the path to the world file -->
   <arg name="world_file_name" default="marsyard2022.world" />
   <arg name="world_path" default="$(var leo_rover_package)/worlds/$(var world_file_name)" />

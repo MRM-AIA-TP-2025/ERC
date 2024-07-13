@@ -1,6 +1,6 @@
 <launch>
     <arg name="pkg_gazebo_ros" default="$(find-pkg-share gazebo_ros)" />
-    <arg name="leo_rover_package" default="/home/dillon/myROS2WS/src/leo_rover" />
+    <arg name="leo_rover_package" default="/home/akshat/ros2_ws/src/leo_rover" />
     <arg name="model" default="$(var leo_rover_package)/urdf/leo_erc_sim.urdf" />
 
     <!-- Set the path to the world file -->
@@ -63,7 +63,7 @@
     </include>
 
     <!-- RVIZ2 -->
-    <node name="rviz" pkg="rviz2" exec="rviz2"  args="-d /home/dillon/myROS2WS/src/leo_rover/config/nav.rviz">
+    <node name="rviz" pkg="rviz2" exec="rviz2"  args="-d /home/akshat/ros2_ws/src/leo_rover/config/nav.rviz">
       <param name="use_sim_time" value="true" />
     </node>
 

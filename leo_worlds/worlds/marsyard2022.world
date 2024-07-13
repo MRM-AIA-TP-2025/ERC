@@ -33,7 +33,7 @@
       <origin_visual>false</origin_visual>
     </scene>
     <include>
-      <uri>/home/dillon/myROS2WS/src/leo_worlds/models/marsyard2022_terrain</uri>
+      <uri>/home/akshat/ros2_ws/src/leo_worlds/models/marsyard2022_terrain</uri>
     </include>
     <model name="landmark1">
       <pose>-7.003806999999998 7.617856 1.172268 0 0 0.0</pose>

@@ -1,91 +1,33 @@
 <launch>
-    <arg name="pkg_gazebo_ros" default="$(find-pkg-share gazebo_ros)" />
-    <arg name="leo_rover_package" default="/home/dillon/myROS2WS/src/leo_rover" />
-    <arg name="model" default="$(var leo_rover_package)/urdf/leo_erc_sim.urdf" />
+  <!-- Set the path to the Gazebo ROS package -->
+  <arg name="pkg_gazebo_ros" default="$(find-pkg-share gazebo_ros)" />
+   
+  <!-- Set the path to this package -->
+  <!-- $(find-pkg-share leo_rover) not working!!!!!! -->
+  <arg name="leo_rover_pkg" default="/home/akshat/ros2_ws/src/leo_rover" />
+   
+ 
+  <!-- Start Gazebo server -->
+  <include file="$(var pkg_gazebo_ros)/launch/gzserver.launch.py">
+  </include>
+ 
+  <!-- Start Gazebo client -->
+  <include file="$(var pkg_gazebo_ros)/launch/gzclient.launch.py" />
 
-    <!-- Start Gazebo server -->
-    <include file="$(var pkg_gazebo_ros)/launch/gzserver.launch.py">
-    </include>
+  <arg name="model" default="$(var leo_rover_pkg)/urdf/leo_erc_sim.urdf" />
 
-    <!-- Start Gazebo client -->
-    <include file="$(var pkg_gazebo_ros)/launch/gzclient.launch.py" />
-
-    <!-- Spawn rover entity -->
-    <node name="spawn_robot_urdf" pkg="gazebo_ros" exec="spawn_entity.py"
+  <!-- Spawn robot in Gazebo -->
+  <node name="spawn_robot_urdf" pkg="gazebo_ros" exec="spawn_entity.py"
     args="-file $(var model) -x -17.003807 -y 7.617856 -z 1.5 -entity my_robot" output="screen" />
 
-    <!-- Robot state publisher -->
-    <node name="robot_state_publisher" pkg="robot_state_publisher" exec="robot_state_publisher" output="screen">
+  <!-- TF description -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" exec="robot_state_publisher" output="screen">
     <param name="robot_description" value="$(command 'cat $(var model)')"/>
     <param name="use_sim_time" value="true" />
-    </node>
+  </node>
 
-    <node name="rgbd_odometry" pkg="rtabmap_odom" exec="rgbd_odometry" output="screen" launch-prefix="gnome-terminal --">
-      <param name="frame_id" value="base_link"/>
-      <param name="odom_frame_id" value="odom"/>
-      <param name="publish_tf" value="true"/>
+  <!-- Show in Rviz   -->
+  <node name="rviz" pkg="rviz2" exec="rviz2">
       <param name="use_sim_time" value="true" />
-      <remap from="rgb/image" to="/zed2_left_camera/image_raw"/>
-      <remap from="rgb/camera_info" to="/zed2_left_camera/camera_info"/>
-      <remap from="depth/image" to="/zed2_left_camera/depth/image_raw"/>
-    </node>
-
-    <node name="rtabmap" pkg="rtabmap_slam" exec="rtabmap" output="screen" launch-prefix="gnome-terminal --">
-      <remap from="rgb/image" to="/zed2_left_camera/image_raw"/>
-      <remap from="rgb/camera_info" to="/zed2_left_camera/camera_info"/>
-      <remap from="depth/image" to="/zed2_left_camera/depth/image_raw"/>
-      <remap from="/rgbd_image" to="/odom_rgbd_image"/>
-      <param name="frame_id" value="base_link"/>
-      <param name="subscribe_depth" value = "true"/>
-      <param name="subscribe_rgbd" value="false"/>
-      <param name="approx_sync" value="true"/>
-      <param name="Rtabmap/PublishOccupancyGrid" value="true"/>
-      <param name="use_sim_time" value="true" />
-    </node>
-
-    <!-- Navigation stack -->
-    <include file="$(find-pkg-share nav2_bringup)/launch/navigation_launch.py">
-        <arg name="params_file" value="$(var leo_rover_package)/params/nav2_params.yaml"/>
-        <arg name="map" value="$(var leo_rover_package)/maps/map.yaml"/>
-        <arg name="use_sim_time" value="true"/>
-    </include>
-
-    <!-- RVIZ2 -->
-    <node name="rviz" pkg="rviz2" exec="rviz2"  args="-d /home/dillon/myROS2WS/src/leo_rover/config/nav.rviz">
-      <param name="use_sim_time" value="true" />
-    </node>
-
-    <!-- Launch cmd_vel_relay -->
-  <node
-    pkg="leo_nodes"
-    exec="cmd_vel_relay"
-    name="cmd_vel_relay"
-    output="screen">
   </node>
-
-  <!-- Launch ground_truth_filter_node -->
-  <node
-    pkg="leo_nodes"
-    exec="ground_truth_filter"
-    name="ground_truth_filter"
-    output="screen">
-  </node>
-
-  <!-- Launch pdu_node -->
-  <node
-    pkg="leo_nodes"
-    exec="pdu_node"
-    name="pdu_node"
-    output="screen"
-    launch-prefix="gnome-terminal --">
-    <param name="probe_model" value="$(var leo_rover_package)/urdf/probe.urdf" />
-  </node>
-
-  <node
-    pkg="leo_nodes"
-    exec="zed2_imu_transform_broadcaster"
-    name="zed2_imu_transform_broadcaster"
-    output="screen">
-  </node>
-
 </launch>

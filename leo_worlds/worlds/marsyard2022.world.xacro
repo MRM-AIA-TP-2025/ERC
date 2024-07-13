@@ -34,7 +34,7 @@
     </scene>
 
     <include>
-      <uri>/home/dillon/myROS2WS/src/leo_worlds/models/marsyard2022_terrain</uri>
+      <uri>/home/akshat/ros2_ws/src/leo_worlds/models/marsyard2022_terrain</uri>
     </include>
 
     <xacro:include filename="sdf/landmark.sdf.xacro" />
