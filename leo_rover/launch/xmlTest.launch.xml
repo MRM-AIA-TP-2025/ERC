@@ -1,0 +1,90 @@
+<launch>
+  <!-- Set the path to the Gazebo ROS package -->
+  <arg name="pkg_gazebo_ros" default="$(find-pkg-share gazebo_ros)" />
+   
+  <!-- Set the path to this package -->
+  <arg name="pkg_share" default="/home/aditi/ERC/leo_rover" />
+   
+  <!-- Set the path to the world file -->
+  <arg name="world_file_name" default="marsyard2022.world" />
+  <arg name="world_path" default="$(var pkg_share)/worlds/$(var world_file_name)" />
+   
+  <!-- Set the path to the SDF model files -->
+  <arg name="gazebo_models_path" default="$(var pkg_share)/models/marsyard2022_terrain" />
+   
+  <arg name="world" default="$(var world_path)" />
+ 
+  <!-- Start Gazebo server -->
+  <include file="$(var pkg_gazebo_ros)/launch/gzserver.launch.py">
+    <arg name="world" value="$(var world)" />
+  </include>
+ 
+  <!-- Start Gazebo client -->
+  <include file="$(var pkg_gazebo_ros)/launch/gzclient.launch.py" />
+
+  <arg name="model" default="/home/aditi/ERC/leo_rover/urdf/leo_erc_sim.urdf" />
+
+  <!-- Spawn robot in Gazebo -->
+  <node name="spawn_robot_urdf" pkg="gazebo_ros" exec="spawn_entity.py"
+    args="-file $(var model) -x -17.003807 -y 7.617856 -z 1.5 -entity my_robot" output="screen" />
+
+  <!-- TF description -->
+  <node name="robot_state_publisher" pkg="robot_state_publisher" exec="robot_state_publisher" output="screen">
+    <param name="robot_description" value="$(command 'cat $(var model)')"/>
+    <param name="use_sim_time" value="true" />
+  </node>
+
+  <!-- Show in Rviz   -->
+  <node name="rviz" pkg="rviz2" exec="rviz2">
+      <param name="use_sim_time" value="true" />
+  </node>
+
+  <node name="ekf_localization_node"
+        pkg="robot_localization"
+        exec="ekf_node" output="screen" launch-prefix="gnome-terminal --">
+        <param name="use_sim_time" value="true"/>
+        <param name="params_file" value="/home/aditi/ERC/leo_rover/config/ekf_localization.yaml"/>
+    </node>
+    
+
+  <node name="rgbd_odometry"
+        pkg="rtabmap_odom"
+        exec="rgbd_odometry" output="screen" launch-prefix="gnome-terminal --">
+        <param name="frame_id" value="base_link"/>
+        <param name="odom_frame_id" value="odom"/>
+        <param name="publish_tf" value="false"/>
+        <remap from="rgb/image" to="/zed2_left_camera/image_raw"/>
+        <remap from="rgb/camera_info" to="/zed2_left_camera/camera_info"/>
+        <remap from="depth/image" to="/zed2_left_camera/depth/image_raw"/>
+    </node>
+    
+
+
+
+  <!-- PointCloud to LaserScan node -->
+  <node pkg="pointcloud_to_laserscan" exec="pointcloud_to_laserscan_node" name="pointcloud_to_laserscan">
+    <remap from="cloud_in" to="/ground_removed_points" />
+    <remap from="scan" to="/scann" />
+    <param name="scan_time" value="0.1" />
+    <param name="range_min" value="0.05" />
+    <param name="range_max" value="10.0" />
+    <param name="angle_increment" value="0.01" />
+    <!-- Additional optional parameters -->
+    <param name="transform_tolerance" value="0.01" />
+    <param name="min_height" value="-1.0" />
+    <param name="max_height" value="1.0" />
+  </node>
+
+
+
+  <!-- Launch cmd_vel_relay -->
+  <node pkg="leo_nodes" exec="cmd_vel_relay" name="cmd_vel_relay" output="screen"/>
+
+
+
+ 
+
+  <node pkg="leo_nodes" exec="zed2_imu_transform_broadcaster" name="zed2_imu_transform_broadcaster" output="screen"/>
+
+</launch>
+

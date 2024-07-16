@@ -14,12 +14,12 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="/home/dillon/myROS2WS/src/leo_rover/models/Chassis.dae"/>
+        <mesh filename="/home/aditi/ERC/leo_rover/models/Chassis.dae"/>
       </geometry>
     </visual>
     <collision>
       <geometry>
-        <mesh filename="/home/dillon/myROS2WS/src/leo_rover/models/Chassis_outline.stl"/>
+        <mesh filename="/home/aditi/ERC/leo_rover/models/Chassis_outline.stl"/>
       </geometry>
     </collision>
   </link>
@@ -31,12 +31,12 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="/home/dillon/myROS2WS/src/leo_rover/models/Rocker.dae"/>
+        <mesh filename="/home/aditi/ERC/leo_rover/models/Rocker.dae"/>
       </geometry>
     </visual>
     <collision>
       <geometry>
-        <mesh filename="/home/dillon/myROS2WS/src/leo_rover/models/Rocker_outline.stl"/>
+        <mesh filename="/home/aditi/ERC/leo_rover/models/Rocker_outline.stl"/>
       </geometry>
     </collision>
   </link>
@@ -48,12 +48,12 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="/home/dillon/myROS2WS/src/leo_rover/models/Rocker.dae"/>
+        <mesh filename="/home/aditi/ERC/leo_rover/models/Rocker.dae"/>
       </geometry>
     </visual>
     <collision>
       <geometry>
-        <mesh filename="/home/dillon/myROS2WS/src/leo_rover/models/Rocker_outline.stl"/>
+        <mesh filename="/home/aditi/ERC/leo_rover/models/Rocker_outline.stl"/>
       </geometry>
     </collision>
   </link>
@@ -65,7 +65,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="/home/dillon/myROS2WS/src/leo_rover/models/WheelA.dae"/>
+        <mesh filename="/home/aditi/ERC/leo_rover/models/WheelA.dae"/>
       </geometry>
     </visual>
     <collision>
@@ -82,7 +82,7 @@
     </collision>
     <collision>
       <geometry>
-        <mesh filename="/home/dillon/myROS2WS/src/leo_rover/models/Wheel_outline.stl"/>
+        <mesh filename="/home/aditi/ERC/leo_rover/models/Wheel_outline.stl"/>
       </geometry>
     </collision>
   </link>
@@ -94,7 +94,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="/home/dillon/myROS2WS/src/leo_rover/models/WheelA.dae"/>
+        <mesh filename="/home/aditi/ERC/leo_rover/models/WheelA.dae"/>
       </geometry>
     </visual>
     <collision>
@@ -111,7 +111,7 @@
     </collision>
     <collision>
       <geometry>
-        <mesh filename="/home/dillon/myROS2WS/src/leo_rover/models/Wheel_outline.stl"/>
+        <mesh filename="/home/aditi/ERC/leo_rover/models/Wheel_outline.stl"/>
       </geometry>
     </collision>
   </link>
@@ -123,7 +123,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="/home/dillon/myROS2WS/src/leo_rover/models/WheelB.dae"/>
+        <mesh filename="/home/aditi/ERC/leo_rover/models/WheelB.dae"/>
       </geometry>
     </visual>
     <collision>
@@ -140,7 +140,7 @@
     </collision>
     <collision>
       <geometry>
-        <mesh filename="/home/dillon/myROS2WS/src/leo_rover/models/Wheel_outline.stl"/>
+        <mesh filename="/home/aditi/ERC/leo_rover/models/Wheel_outline.stl"/>
       </geometry>
     </collision>
   </link>
@@ -152,7 +152,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="/home/dillon/myROS2WS/src/leo_rover/models/WheelB.dae"/>
+        <mesh filename="/home/aditi/ERC/leo_rover/models/WheelB.dae"/>
       </geometry>
     </visual>
     <collision>
@@ -169,7 +169,7 @@
     </collision>
     <collision>
       <geometry>
-        <mesh filename="/home/dillon/myROS2WS/src/leo_rover/models/Wheel_outline.stl"/>
+        <mesh filename="/home/aditi/ERC/leo_rover/models/Wheel_outline.stl"/>
       </geometry>
     </collision>
   </link>
@@ -259,12 +259,12 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="/home/dillon/myROS2WS/src/leo_rover/models/ERC2021payload.dae"/>
+        <mesh filename="/home/aditi/ERC/leo_rover/models/ERC2021payload.dae"/>
       </geometry>
     </visual>
     <collision>
       <geometry>
-        <mesh filename="/home/dillon/myROS2WS/src/leo_rover/models/ERC2021payload_outline.dae"/>
+        <mesh filename="/home/aditi/ERC/leo_rover/models/ERC2021payload_outline.dae"/>
       </geometry>
     </collision>
   </link>
@@ -283,13 +283,13 @@
     <visual>
       <origin rpy="0 0 3.141592653589793" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="/home/dillon/myROS2WS/src/leo_rover/models/Manfrotto_head.dae"/>
+        <mesh filename="/home/aditi/ERC/leo_rover/models/Manfrotto_head.dae"/>
       </geometry>
     </visual>
     <collision>
       <origin rpy="0 0 3.141592653589793" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="/home/dillon/myROS2WS/src/leo_rover/models/Manfrotto_head.dae"/>
+        <mesh filename="/home/aditi/ERC/leo_rover/models/Manfrotto_head.dae"/>
       </geometry>
     </collision>
   </link>
@@ -307,12 +307,12 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="/home/dillon/myROS2WS/src/leo_rover/models/ZED2.dae"/>
+        <mesh filename="/home/aditi/ERC/leo_rover/models/ZED2.dae"/>
       </geometry>
     </visual>
     <collision>
       <geometry>
-        <mesh filename="/home/dillon/myROS2WS/src/leo_rover/models/ZED2.dae"/>
+        <mesh filename="/home/aditi/ERC/leo_rover/models/ZED2.dae"/>
       </geometry>
     </collision>
   </link>
@@ -816,4 +816,61 @@
       <updateRate>30.0</updateRate>
     </plugin>
   </gazebo>
+
+  <!-- lidar  
+  <link name="lidar">
+    <inertial>
+      <mass value="1e-05"/>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <inertia ixx="1e-6" ixy="0.0" ixz="0.0" iyy="1e-6" iyz="0.0" izz="1e-6"/>
+    </inertial>
+    <visual>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <cylinder length="0.08" radius="0.06"/>
+      </geometry>
+      <material name="black"/>
+    </visual>
+    <collision>
+      <origin rpy="0 0 0" xyz="0 0 0"/>
+      <geometry>
+        <cylinder length="0.08" radius="0.06"/>
+      </geometry>
+    </collision>
+  </link>
+  <joint name="lidar_joint" type="fixed">
+    <origin rpy="0 0 2.792527" xyz="0.2 0 0.17"/>
+    <parent link="rocker_L_link"/>
+    <child link="lidar"/>
+    <axis xyz="0 1 0"/>
+  </joint>
+  <gazebo reference="lidar">
+        <sensor name="laser" type="ray">
+            <pose> 0 0 0 0 0 0 </pose>
+            <visualize>true</visualize>
+            <update_rate>10</update_rate>
+            <ray>
+                <scan>
+                    <horizontal>
+                        <samples>360</samples>
+                        <min_angle>-3.14</min_angle>
+                        <max_angle>3.14</max_angle>
+                    </horizontal>
+                </scan>
+                <range>
+                    <min>0.3</min>
+                    <max>12</max>
+                </range>
+            </ray>
+
+            <plugin name="laser_controller" filename="libgazebo_ros_ray_sensor.so">
+                <ros>
+                    <remapping>~/out:=scan</remapping>
+                </ros>
+                <output_type>sensor_msgs/LaserScan</output_type>
+                <frame_name>zed2_left_camera_frame</frame_name>
+            </plugin>
+        </sensor>
+
+    </gazebo>-->
 </robot>

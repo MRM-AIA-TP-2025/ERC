@@ -10,7 +10,7 @@
       <collision name="terrain_collision">
         <geometry>
           <heightmap>
-            <uri>/home/dillon/myROS2WS/src/leo_rover/models/marsyard2022_terrain/dem/marsyard2022_terrain_hm.tif</uri>
+            <uri>/home/aditi/ERC/leo_rover/models/marsyard2022_terrain/dem/marsyard2022_terrain_hm.tif</uri>
             <pos>0 0 0</pos>
             <size>50 50 4.820803273566</size>
           </heightmap>
@@ -21,12 +21,12 @@
         <geometry>
           <heightmap>
             <use_terrain_paging>false</use_terrain_paging>
-            <uri>/home/dillon/myROS2WS/src/leo_rover/models/marsyard2022_terrain/dem/marsyard2022_terrain_hm.tif</uri>
+            <uri>/home/aditi/ERC/leo_rover/models/marsyard2022_terrain/dem/marsyard2022_terrain_hm.tif</uri>
             <pos>0 0 0</pos>
             <size>50 50 4.820803273566</size>
             <texture>
-              <diffuse>/home/dillon/myROS2WS/src/leo_rover/models/marsyard2022_terrain/dem/marsyard2022_terrain_texture.png</diffuse>
-              <normal>/home/dillon/myROS2WS/src/leo_rover/media/materials/textures/flat_normal.png</normal>
+              <diffuse>/home/aditi/ERC/leo_rover/models/marsyard2022_terrain/dem/marsyard2022_terrain_texture.png</diffuse>
+              <normal>/home/aditi/ERC/leo_rover/media/materials/textures/flat_normal.png</normal>
               <size>50</size>
             </texture>
           </heightmap>

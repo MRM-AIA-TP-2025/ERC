@@ -1,0 +1,126 @@
+<launch>
+    <arg name="pkg_gazebo_ros" default="$(find-pkg-share gazebo_ros)" />
+    <arg name="leo_rover_package" default="/home/aditi/ERC/leo_rover" />
+    <arg name="model" default="$(var leo_rover_package)/urdf/leo_erc_sim.urdf" />
+
+    <!-- Set the path to the world file -->
+    <arg name="world_file_name" default="marsyard2022.world" />
+    <arg name="world_path" default="$(var leo_rover_package)/worlds/$(var world_file_name)" />
+    <arg name="world" default="$(var world_path)" />
+    
+    <!-- Set the path to the SDF model files -->
+    <arg name="gazebo_models_path" default="$(var leo_rover_package)/models/marsyard2022_terrain" />
+
+    <!-- Start Gazebo server -->
+    <include file="$(var pkg_gazebo_ros)/launch/gzserver.launch.py">
+    <arg name="world" value="$(var world)" />
+    </include>
+
+    <!-- Start Gazebo client -->
+    <include file="$(var pkg_gazebo_ros)/launch/gzclient.launch.py" />
+
+    <!-- Spawn rover entity -->
+    <node name="spawn_robot_urdf" pkg="gazebo_ros" exec="spawn_entity.py"
+    args="-file $(var model) -x -17.003807 -y 7.617856 -z 1.5 -entity my_robot" output="screen" />
+
+    <!-- Robot state publisher -->
+    <node name="robot_state_publisher" pkg="robot_state_publisher" exec="robot_state_publisher" output="screen">
+    <param name="robot_description" value="$(command 'cat $(var model)')"/>
+    <param name="use_sim_time" value="true" />
+    </node>
+<!-- 
+    <node name="rgbd_odometry" pkg="rtabmap_odom" exec="rgbd_odometry" output="screen">
+      <param name="frame_id" value="base_link"/>
+      <param name="odom_frame_id" value="odom"/>
+      <param name="publish_tf" value="true"/>
+      <param name="use_sim_time" value="true" />
+      <remap from="rgb/image" to="/zed2_left_camera/image_raw"/>
+      <remap from="rgb/camera_info" to="/zed2_left_camera/camera_info"/>
+      <remap from="depth/image" to="/zed2_left_camera/depth/image_raw"/>
+      <param name="approx_sync" value="true"/>
+    </node>
+-->
+<!-- aruco_detect.launch.xml 
+<node
+  pkg="camera_calibration_parsers"
+  exec="convert"
+  name="camera_info_publisher"
+  output="screen">
+  <param name="file" value="/home/aditi/ERC/leo_rover/params/zed2_left_camera_calibration.yaml"/>
+  <param name="camera_info_url" value="/home/aditi/ERC/leo_rover/params/zed2_left_camera_calibration.yaml"/>
+</node>
+
+-->
+<node name="camera_info_manager" pkg="camera_info_manager" exec="camera_info_manager" output="screen">
+  <param name="camera_name" value="zed2_left_camera" />
+  <param name="yaml_file" value="/home/aditi/ERC/leo_rover/params/zed2_left_camera_calibration.yaml" />
+</node>
+
+ <node
+    pkg="aruco_ros"
+    exec="single"
+    name="single_marker_publisher"
+    output="screen">
+    <param name="camera_frame" value="zed2_left_camera_optical_frame" />
+    <param name="marker_size" value="0.15" /> <!-- Size of the markers in meters -->
+    <param name="marker_id" value="-1" /> <!-- Detect all markers -->
+    <param name="debug" value="true" />
+    <remap from="image" to="/zed2_left_camera/image_raw" />
+    <remap from="camera_info" to="/zed2_left_camera/camera_info" />
+</node>
+
+
+    <node name="rtabmap" pkg="rtabmap_slam" exec="rtabmap" output="screen" launch-prefix="gnome-terminal --">
+      <remap from="rgb/image" to="/zed2_left_camera/image_raw"/>
+      <remap from="rgb/camera_info" to="/zed2_left_camera/camera_info"/>
+      <remap from="depth/image" to="/zed2_left_camera/depth/image_raw"/>
+      <remap from="/rgbd_image" to="/odom_rgbd_image"/>
+      <remap from="/imu" to="/imu/data_raw"/>
+      <param name="frame_id" value="base_link"/>
+      <param name="subscribe_depth" value = "true"/>
+      <param name="subscribe_rgbd" value="false"/>
+      <param name="approx_sync" value="true"/>
+      <param name="Rtabmap/PublishOccupancyGrid" value="true"/>
+      <param name="use_sim_time" value="true" />
+      <param name="subscribe_imu" value="true"/>
+    </node>
+
+    <!-- Navigation stack -->
+    <include file="$(find-pkg-share nav2_bringup)/launch/navigation_launch.py">
+        <arg name="params_file" value="$(var leo_rover_package)/params/nav2_params.yaml"/>
+        <arg name="map" value="$(var leo_rover_package)/maps/map.yaml"/>
+        <arg name="use_sim_time" value="true"/>
+    </include>
+
+    <!-- RVIZ2 -->
+    <node name="rviz" pkg="rviz2" exec="rviz2"  args="-d /home/aditi/ERC/leo_rover/config/nav.rviz">
+      <param name="use_sim_time" value="true" />
+    </node>
+
+    <!-- Launch cmd_vel_relay -->
+  <node
+    pkg="leo_nodes"
+    exec="cmd_vel_relay"
+    name="cmd_vel_relay"
+    output="screen">
+  </node>
+
+
+  <!-- Launch pdu_node -->
+  <node
+    pkg="leo_nodes"
+    exec="pdu_node"
+    name="pdu_node"
+    output="screen"
+    launch-prefix="gnome-terminal --">
+    <param name="probe_model" value="$(var leo_rover_package)/urdf/probe.urdf" />
+  </node>
+
+  <node
+    pkg="leo_nodes"
+    exec="zed2_imu_transform_broadcaster"
+    name="zed2_imu_transform_broadcaster"
+    output="screen">
+  </node>
+  
+</launch>

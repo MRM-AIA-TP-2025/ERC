@@ -1,0 +1,26 @@
+<launch>
+  <!-- Set the path to the Gazebo ROS package -->
+  <arg name="pkg_gazebo_ros" default="$(find-pkg-share gazebo_ros)" />
+   
+  <!-- Set the path to this package -->
+  <!-- $(find-pkg-share leo_rover) not working!!!!!! -->
+  <arg name="pkg_share" default="/home/aditi/ERC/leo_rover" />
+   
+  <!-- Set the path to the world file -->
+  <arg name="world_file_name" default="marsyard2022.world" />
+  <arg name="world_path" default="$(var pkg_share)/worlds/$(var world_file_name)" />
+   
+  <!-- Set the path to the SDF model files -->
+  <arg name="gazebo_models_path" default="$(var pkg_share)/models/marsyard2022_terrain" />
+   
+  <arg name="world" default="$(var world_path)" />
+ 
+  <!-- Start Gazebo server -->
+  <include file="$(var pkg_gazebo_ros)/launch/gzserver.launch.py">
+    <arg name="world" value="$(var world)" />
+  </include>
+ 
+  <!-- Start Gazebo client -->
+  <include file="$(var pkg_gazebo_ros)/launch/gzclient.launch.py" />
+
+</launch>
