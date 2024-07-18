@@ -108,6 +108,13 @@
     pkg="leo_nodes"
     exec="odom_offset_node"
     name="odom_offset_node"
+    output="screen">
+  </node>
+
+  <node
+    pkg="leo_nodes"
+    exec="controller"
+    name="controller"
     output="screen"
     launch-prefix="gnome-terminal --">
   </node>
