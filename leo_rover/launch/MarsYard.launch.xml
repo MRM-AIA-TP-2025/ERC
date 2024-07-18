@@ -96,4 +96,20 @@
     output="screen"
     launch-prefix="gnome-terminal --">
   </node>
+
+  <node
+    pkg="leo_nodes"
+    exec="aruco"
+    name="aruco"
+    output="screen">
+  </node>
+
+  <node
+    pkg="leo_nodes"
+    exec="odom_offset_node"
+    name="odom_offset_node"
+    output="screen"
+    launch-prefix="gnome-terminal --">
+  </node>
+
 </launch>

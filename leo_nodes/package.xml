@@ -7,10 +7,6 @@
   <maintainer email="dillon.mitmpl2022@learner.manipal.edu">dillon</maintainer>
   <license>TODO: License declaration</license>
 
-  <test_depend>ament_copyright</test_depend>
-  <test_depend>ament_flake8</test_depend>
-  <test_depend>ament_pep257</test_depend>
-  <test_depend>python3-pytest</test_depend>
   <depend>rclpy</depend>
   <depend>geometry_msgs</depend>
   <depend>std_msgs</depend>
@@ -18,7 +14,15 @@
   <depend>nav_msgs</depend>
   <depend>tf2_ros</depend>
   <depend>gazebo_msgs</depend>
+  <depend>opencv-python</depend>
+  <depend>opencv-contrib-python</depend>
+  <depend>numpy</depend>
+  <depend>cv_bridge</depend>
 
+  <test_depend>ament_copyright</test_depend>
+  <test_depend>ament_flake8</test_depend>
+  <test_depend>ament_pep257</test_depend>
+  <test_depend>python3-pytest</test_depend>
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
 
