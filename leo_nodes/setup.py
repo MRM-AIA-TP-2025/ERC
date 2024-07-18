@@ -27,6 +27,7 @@ setup(
             'cmd_vel_relay = leo_nodes.cmd_vel_relay:main',
             'zed2_imu_transform_publisher = leo_nodes.zed2_imu_transform_publisher:main',
             'navigation_controller = leo_nodes.navigation_control:main',
+            'controller = leo_nodes.controller:main',
         ],
 
     },

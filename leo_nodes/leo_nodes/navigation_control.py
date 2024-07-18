@@ -3,7 +3,7 @@ from rclpy.node import Node
 from geometry_msgs.msg import PoseStamped
 from tf2_ros import TransformListener, Buffer
 import tf2_geometry_msgs
-from std_msgs.msg import Empty
+from std_msgs.msg import Empty, Int32
 
 class GoalSetterNode(Node):
     def __init__(self):
@@ -43,11 +43,17 @@ class GoalSetterNode(Node):
         # TF Buffer and Listener
         self.tf_buffer = Buffer()
         self.tf_listener = TransformListener(self.tf_buffer, self)
-       
+        self.start_nav = False
+
+        self.controller_sub = self.create_subscription(Int32, '/controller', self.controller_callback, 10)
+
         # Timer to send goals
         self.timer = self.create_timer(5.0, self.send_next_goal)
        
     def send_next_goal(self):
+        if not self.start_nav:
+            return
+
         self.check_goal_reached()
         if self.current_goal_index < len(self.goals):
             goal = self.goals[self.current_goal_index]
@@ -94,6 +100,8 @@ class GoalSetterNode(Node):
                     self.drop_probe()
                
                 self.current_goal_index += 1
+                if current_goal_index == len(self.goals):
+                    self.start_nav = False
        
         except Exception as e:
             self.get_logger().error(f'Failed to lookup transform: {e}')
@@ -101,6 +109,13 @@ class GoalSetterNode(Node):
     def drop_probe(self):
         self.get_logger().info('Dropping probe...')
         self.drop_pub.publish(Empty())
+
+    def controller_callback(self,msg):
+        if msg.data == -1:
+            self.get_logger().info('Starting Autonomous Navigation!')
+            self.start_nav = True
+        else:
+            self.current_goal_index = msg.data
 
 def main(args=None):
     rclpy.init(args=args)
