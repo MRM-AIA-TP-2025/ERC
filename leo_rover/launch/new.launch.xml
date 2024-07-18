@@ -51,23 +51,9 @@
 </node>
 
 -->
-<node name="camera_info_manager" pkg="camera_info_manager" exec="camera_info_manager" output="screen">
-  <param name="camera_name" value="zed2_left_camera" />
-  <param name="yaml_file" value="/home/aditi/ERC/leo_rover/params/zed2_left_camera_calibration.yaml" />
-</node>
 
- <node
-    pkg="aruco_ros"
-    exec="single"
-    name="single_marker_publisher"
-    output="screen">
-    <param name="camera_frame" value="zed2_left_camera_optical_frame" />
-    <param name="marker_size" value="0.15" /> <!-- Size of the markers in meters -->
-    <param name="marker_id" value="-1" /> <!-- Detect all markers -->
-    <param name="debug" value="true" />
-    <remap from="image" to="/zed2_left_camera/image_raw" />
-    <remap from="camera_info" to="/zed2_left_camera/camera_info" />
-</node>
+
+
 
 
     <node name="rtabmap" pkg="rtabmap_slam" exec="rtabmap" output="screen" launch-prefix="gnome-terminal --">
@@ -104,6 +90,8 @@
     name="cmd_vel_relay"
     output="screen">
   </node>
+  
+
 
 
   <!-- Launch pdu_node -->

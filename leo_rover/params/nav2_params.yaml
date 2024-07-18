@@ -210,7 +210,8 @@ planner_server:
     GridBased:
       plugin: "nav2_navfn_planner/NavfnPlanner"
       tolerance: 0.5
-      use_astar: false
+      max_planning_distance: 10.0
+      use_astar: true
       allow_unknown: true
 
 smoother_server:
