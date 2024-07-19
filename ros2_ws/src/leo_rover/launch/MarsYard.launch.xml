@@ -29,7 +29,7 @@
     <param name="use_sim_time" value="true" />
     </node>
 
-    <node name="rtabmap" pkg="rtabmap_slam" exec="rtabmap" output="screen" launch-prefix="gnome-terminal --">
+    <node name="rtabmap" pkg="rtabmap_slam" exec="rtabmap" output="screen" >
       <remap from="rgb/image" to="/zed2_left_camera/image_raw"/>
       <remap from="rgb/camera_info" to="/zed2_left_camera/camera_info"/>
       <remap from="depth/image" to="/zed2_left_camera/depth/image_raw"/>
@@ -80,7 +80,7 @@
     exec="pdu_node"
     name="pdu_node"
     output="screen"
-    launch-prefix="gnome-terminal --">
+    >
     <param name="probe_model" value="$(var leo_rover_package)/urdf/probe.urdf" />
   </node>
 
@@ -96,7 +96,7 @@
     exec="navigation_controller"
     name="navigation_controller"
     output="screen"
-    launch-prefix="gnome-terminal --">
+    >
   </node>
 
   <node
@@ -112,12 +112,5 @@
     name="odom_offset_node"
     output="screen">
   </node>
-
-  <node
-    pkg="leo_nodes"
-    exec="controller"
-    name="controller"
-    output="screen"
-    launch-prefix="gnome-terminal --">
-  </node>
+  
 </launch>
