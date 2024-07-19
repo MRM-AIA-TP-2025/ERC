@@ -32,7 +32,7 @@ RUN rosdep update && \
     ros-humble-gazebo-ros-pkgs \
     ros-humble-rtabmap-slam \
     ros-humble-rtabmap \
-    ros-humble-nav2-bringup
+    ros-humble-nav2-bringup\
     && rosdep install --from-paths src --ignore-src -r -y
 
 # Build the ROS2 workspace
