@@ -2,60 +2,109 @@
 
 import rclpy
 from rclpy.node import Node
-import numpy as np
-import cv2
+from geometry_msgs.msg import Pose, TwistWithCovariance
+from nav_msgs.msg import Odometry
+from std_srvs.srv import Trigger
+from std_msgs.msg import Empty as EmptyMsg
+from gazebo_msgs.srv import DeleteEntity
 
-class ArucoDetector(Node):
+
+class OdomCompatNode(Node):
     def __init__(self):
         super().__init__('odom_compat_node')
 
-        # Load camera calibration data
-        calib_data_path = "/home/aditi/calib_data/MultiMatrix.npz"
-        calib_data = np.load(calib_data_path)
+        self.last_pose = Pose()
+        self.last_pose.orientation.w = 1.0
+        self.offset_matrix = None
+
+        self.wheel_odom_pub = self.create_publisher(Odometry, 'wheel_odom_with_covariance', 1)
+        self.wheel_odom_sub = self.create_subscription(
+            Odometry,
+            '/odom',
+            self.wheel_odom_callback,
+            1
+        )
+
+        self.wheel_odom_reset_srv = self.create_service(
+            Trigger,
+            'firmware/reset_odometry',
+            self.wheel_odom_reset
+        )
+
+        self.zed2_odom_pub = self.create_publisher(Odometry, 'zed2/odom', 1)
+        self.zed2_odom_sub = self.create_subscription(
+            Odometry,
+            'gazebo/zed2/odom',
+            self.zed2_odom_callback,
+            1
+        )
+
+        self.zed2_reset_odom_client = self.create_client(DeleteEntity, 'gazebo/zed2/reset_odom')
+        self.zed2_reset_odom_sub = self.create_subscription(
+            EmptyMsg,
+            'zed2/reset_odometry',
+            self.zed2_reset_odom_callback,
+            1
+        )
+
+        while not self.zed2_reset_odom_client.wait_for_service(timeout_sec=1.0):
+            self.get_logger().info('Service not available, waiting...')
         
-        # Extract calibration parameters
-        self.camera_matrix = calib_data["camMatrix"]
-        self.dist_coeffs = calib_data["distCoef"]
+        self.reset_zed2_odometry()
 
-        # ArUco marker parameters
-        self.aruco_dict = cv2.aruco.getPredefinedDictionary(cv2.aruco.DICT_5X5_1000)
-        self.aruco_params = cv2.aruco.DetectorParameters()
-        self.aruco_size = 0.032# ArUco marker size in meters
+    def wheel_odom_callback(self, msg: Odometry):
+        self.last_pose = msg.pose.pose
 
-        # Start the camera
-        self.cap = cv2.VideoCapture(2)  # Change the index if needed
+        if self.offset_matrix is not None:
+            transformed_pose = self.apply_offset(msg.pose.pose)
+            msg.pose.pose = transformed_pose
 
-        self.process_camera()
+        self.wheel_odom_pub.publish(msg)
 
-    def process_camera(self):
-        while self.cap.isOpened():
-            ret, frame = self.cap.read()
-            if not ret:
-                break
+    def apply_offset(self, pose: Pose) -> Pose:
+        # Apply offsets directly to pose (adjust as per your offsets)
+        pose.position.x += 0.0  # Example offset adjustments
+        pose.position.y += 0.0
+        pose.position.z += 0.0
 
-            gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-            corners, ids, rejected = cv2.aruco.detectMarkers(gray, self.aruco_dict, parameters=self.aruco_params)
+        return pose
 
-            if ids is not None:
-                for i, corner in enumerate(corners):
-                    rvec, tvec, _ = cv2.aruco.estimatePoseSingleMarkers(corner, self.aruco_size, self.camera_matrix, self.dist_coeffs)
-                    cv2.aruco.drawDetectedMarkers(frame, corners, ids)
-                    #cv2.aruco.drawAxis(frame, self.camera_matrix, self.dist_coeffs, rvec, tvec, 0.1)
-                    self.get_logger().info(f"Detected ArUco marker ID: {ids[i][0]} at position {tvec[0][0]}")
+    def wheel_odom_reset(self, req: Trigger.Request,):
+        self.update_offset()
+        return Trigger.Response(success=True, message="")
 
-            cv2.imshow('Aruco Detection', frame)
-            if cv2.waitKey(1) & 0xFF == ord('q'):
-                break
+    def zed2_odom_callback(self, msg: Odometry):
+        msg.twist = TwistWithCovariance()
+        self.zed2_odom_pub.publish(msg)
 
-        self.cap.release()
-        cv2.destroyAllWindows()
+    def zed2_reset_odom_callback(self, msg: EmptyMsg):
+        self.reset_zed2_odometry()
+
+    def reset_zed2_odometry(self):
+        request = DeleteEntity.Request()
+        request.name = "zed2"
+        future = self.zed2_reset_odom_client.call_async(request)
+        self.get_logger().info('Resetting ZED2 odometry')
+        future.add_done_callback(self.reset_zed2_odom_done)
+
+    def reset_zed2_odom_done(self, future):
+        try:
+            response = future.result()
+            if response.success:
+                self.get_logger().info('ZED2 odometry reset successfully')
+            else:
+                self.get_logger().error('Failed to reset ZED2 odometry')
+        except Exception as e:
+            self.get_logger().error(f'Exception while calling service: {str(e)}')
+
 
 def main(args=None):
     rclpy.init(args=args)
-    node = ArucoDetector()
+    node = OdomCompatNode()
     rclpy.spin(node)
     node.destroy_node()
     rclpy.shutdown()
+
 
 if __name__ == '__main__':
     main()

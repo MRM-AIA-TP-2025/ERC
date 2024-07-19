@@ -1,6 +1,6 @@
 <launch>
     <arg name="pkg_gazebo_ros" default="$(find-pkg-share gazebo_ros)" />
-    <arg name="leo_rover_package" default="/home/aditi/ERC/leo_rover" />
+    <arg name="leo_rover_package" default="/home/akshat/ros2_ws/src/leo_rover" />
     <arg name="model" default="$(var leo_rover_package)/urdf/leo_erc_sim.urdf" />
 
     <!-- Set the path to the world file -->
@@ -28,33 +28,6 @@
     <param name="robot_description" value="$(command 'cat $(var model)')"/>
     <param name="use_sim_time" value="true" />
     </node>
-<!-- 
-    <node name="rgbd_odometry" pkg="rtabmap_odom" exec="rgbd_odometry" output="screen">
-      <param name="frame_id" value="base_link"/>
-      <param name="odom_frame_id" value="odom"/>
-      <param name="publish_tf" value="true"/>
-      <param name="use_sim_time" value="true" />
-      <remap from="rgb/image" to="/zed2_left_camera/image_raw"/>
-      <remap from="rgb/camera_info" to="/zed2_left_camera/camera_info"/>
-      <remap from="depth/image" to="/zed2_left_camera/depth/image_raw"/>
-      <param name="approx_sync" value="true"/>
-    </node>
--->
-<!-- aruco_detect.launch.xml 
-<node
-  pkg="camera_calibration_parsers"
-  exec="convert"
-  name="camera_info_publisher"
-  output="screen">
-  <param name="file" value="/home/aditi/ERC/leo_rover/params/zed2_left_camera_calibration.yaml"/>
-  <param name="camera_info_url" value="/home/aditi/ERC/leo_rover/params/zed2_left_camera_calibration.yaml"/>
-</node>
-
--->
-
-
-
-
 
     <node name="rtabmap" pkg="rtabmap_slam" exec="rtabmap" output="screen" launch-prefix="gnome-terminal --">
       <remap from="rgb/image" to="/zed2_left_camera/image_raw"/>
@@ -79,7 +52,7 @@
     </include>
 
     <!-- RVIZ2 -->
-    <node name="rviz" pkg="rviz2" exec="rviz2"  args="-d /home/aditi/ERC/leo_rover/config/nav.rviz">
+    <node name="rviz" pkg="rviz2" exec="rviz2"  args="-d /home/akshat/ros2_ws/src/leo_rover/config/nav.rviz">
       <param name="use_sim_time" value="true" />
     </node>
 
@@ -90,9 +63,6 @@
     name="cmd_vel_relay"
     output="screen">
   </node>
-  
-
-
 
   <!-- Launch pdu_node -->
   <node
@@ -111,4 +81,17 @@
     output="screen">
   </node>
   
+  <node
+    pkg="leo_nodes"
+    exec="aruco"
+    name="aruco"
+    output="screen">
+  </node>
+
+  <node
+    pkg="leo_nodes"
+    exec="odom_offset_node"
+    name="odom_offset_node"
+    output="screen">
+  </node>
 </launch>

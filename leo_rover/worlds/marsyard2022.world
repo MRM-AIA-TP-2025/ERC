@@ -15,6 +15,14 @@
         </solver>
       </ode>
     </physics>
+    <friction>
+      <mu>20.0</mu>
+      <fdir>0 0 1</fdir>
+      <links>
+        <link name="rocker_L_link" friction="true"/>
+        <link name="rocker_R_link" friction="true"/>
+      </links>
+    </friction>
     <light name="sun" type="directional">
       <pose>0 0 100 0 0 0.01</pose>
       <diffuse>1 1 1 1</diffuse>
@@ -33,7 +41,7 @@
       <origin_visual>false</origin_visual>
     </scene>
     <include>
-      <uri>/home/aditi/ERC/leo_rover/models/marsyard2022_terrain</uri>
+      <uri>/home/akshat/ros2_ws/src/leo_rover/models/marsyard2022_terrain</uri>
     </include>
     <model name="landmark1">
       <pose>-7.003806999999998 7.617856 1.172268 0 0 0.0</pose>
@@ -71,8 +79,8 @@
           </geometry>
           <material>
               <script>
-              <uri>/home/aditi/ERC/leo_rover/media/materials/scripts</uri>
-              <uri>/home/aditi/ERC/leo_rover/media/materials/textures</uri>
+              <uri>/home/akshat/ros2_ws/src/leo_rover/media/materials/scripts</uri>
+              <uri>/home/akshat/ros2_ws/src/leo_rover/media/materials/textures</uri>
               <name>ERC_Landmark/Box</name>
             </script>
           </material>
@@ -94,8 +102,8 @@
           </geometry>
           <material>
             <script>
-              <uri>/home/aditi/ERC/leo_rover/media/materials/scripts</uri>
-              <uri>/home/aditi/ERC/leo_rover/media/materials/textures</uri>
+              <uri>/home/akshat/ros2_ws/src/leo_rover/media/materials/scripts</uri>
+              <uri>/home/akshat/ros2_ws/src/leo_rover/media/materials/textures</uri>
               <name>ERC_Landmark/1</name>
             </script>
           </material>

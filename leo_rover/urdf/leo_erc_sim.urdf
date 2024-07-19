@@ -14,12 +14,12 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="/home/aditi/ERC/leo_rover/models/Chassis.dae"/>
+        <mesh filename="/home/akshat/ros2_ws/src/leo_rover/models/Chassis.dae"/>
       </geometry>
     </visual>
     <collision>
       <geometry>
-        <mesh filename="/home/aditi/ERC/leo_rover/models/Chassis_outline.stl"/>
+        <mesh filename="/home/akshat/ros2_ws/src/leo_rover/models/Chassis_outline.stl"/>
       </geometry>
     </collision>
   </link>
@@ -31,12 +31,12 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="/home/aditi/ERC/leo_rover/models/Rocker.dae"/>
+        <mesh filename="/home/akshat/ros2_ws/src/leo_rover/models/Rocker.dae"/>
       </geometry>
     </visual>
     <collision>
       <geometry>
-        <mesh filename="/home/aditi/ERC/leo_rover/models/Rocker_outline.stl"/>
+        <mesh filename="/home/akshat/ros2_ws/src/leo_rover/models/Rocker_outline.stl"/>
       </geometry>
     </collision>
   </link>
@@ -48,12 +48,12 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="/home/aditi/ERC/leo_rover/models/Rocker.dae"/>
+        <mesh filename="/home/akshat/ros2_ws/src/leo_rover/models/Rocker.dae"/>
       </geometry>
     </visual>
     <collision>
       <geometry>
-        <mesh filename="/home/aditi/ERC/leo_rover/models/Rocker_outline.stl"/>
+        <mesh filename="/home/akshat/ros2_ws/src/leo_rover/models/Rocker_outline.stl"/>
       </geometry>
     </collision>
   </link>
@@ -65,7 +65,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="/home/aditi/ERC/leo_rover/models/WheelA.dae"/>
+        <mesh filename="/home/akshat/ros2_ws/src/leo_rover/models/WheelA.dae"/>
       </geometry>
     </visual>
     <collision>
@@ -82,7 +82,7 @@
     </collision>
     <collision>
       <geometry>
-        <mesh filename="/home/aditi/ERC/leo_rover/models/Wheel_outline.stl"/>
+        <mesh filename="/home/akshat/ros2_ws/src/leo_rover/models/Wheel_outline.stl"/>
       </geometry>
     </collision>
   </link>
@@ -94,7 +94,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="/home/aditi/ERC/leo_rover/models/WheelA.dae"/>
+        <mesh filename="/home/akshat/ros2_ws/src/leo_rover/models/WheelA.dae"/>
       </geometry>
     </visual>
     <collision>
@@ -111,7 +111,7 @@
     </collision>
     <collision>
       <geometry>
-        <mesh filename="/home/aditi/ERC/leo_rover/models/Wheel_outline.stl"/>
+        <mesh filename="/home/akshat/ros2_ws/src/leo_rover/models/Wheel_outline.stl"/>
       </geometry>
     </collision>
   </link>
@@ -123,7 +123,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="/home/aditi/ERC/leo_rover/models/WheelB.dae"/>
+        <mesh filename="/home/akshat/ros2_ws/src/leo_rover/models/WheelB.dae"/>
       </geometry>
     </visual>
     <collision>
@@ -140,7 +140,7 @@
     </collision>
     <collision>
       <geometry>
-        <mesh filename="/home/aditi/ERC/leo_rover/models/Wheel_outline.stl"/>
+        <mesh filename="/home/akshat/ros2_ws/src/leo_rover/models/Wheel_outline.stl"/>
       </geometry>
     </collision>
   </link>
@@ -152,7 +152,7 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="/home/aditi/ERC/leo_rover/models/WheelB.dae"/>
+        <mesh filename="/home/akshat/ros2_ws/src/leo_rover/models/WheelB.dae"/>
       </geometry>
     </visual>
     <collision>
@@ -169,7 +169,7 @@
     </collision>
     <collision>
       <geometry>
-        <mesh filename="/home/aditi/ERC/leo_rover/models/Wheel_outline.stl"/>
+        <mesh filename="/home/akshat/ros2_ws/src/leo_rover/models/Wheel_outline.stl"/>
       </geometry>
     </collision>
   </link>
@@ -259,12 +259,12 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="/home/aditi/ERC/leo_rover/models/ERC2021payload.dae"/>
+        <mesh filename="/home/akshat/ros2_ws/src/leo_rover/models/ERC2021payload.dae"/>
       </geometry>
     </visual>
     <collision>
       <geometry>
-        <mesh filename="/home/aditi/ERC/leo_rover/models/ERC2021payload_outline.dae"/>
+        <mesh filename="/home/akshat/ros2_ws/src/leo_rover/models/ERC2021payload_outline.dae"/>
       </geometry>
     </collision>
   </link>
@@ -283,13 +283,13 @@
     <visual>
       <origin rpy="0 0 3.141592653589793" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="/home/aditi/ERC/leo_rover/models/Manfrotto_head.dae"/>
+        <mesh filename="/home/akshat/ros2_ws/src/leo_rover/models/Manfrotto_head.dae"/>
       </geometry>
     </visual>
     <collision>
       <origin rpy="0 0 3.141592653589793" xyz="0 0 0"/>
       <geometry>
-        <mesh filename="/home/aditi/ERC/leo_rover/models/Manfrotto_head.dae"/>
+        <mesh filename="/home/akshat/ros2_ws/src/leo_rover/models/Manfrotto_head.dae"/>
       </geometry>
     </collision>
   </link>
@@ -307,12 +307,12 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="/home/aditi/ERC/leo_rover/models/ZED2.dae"/>
+        <mesh filename="/home/akshat/ros2_ws/src/leo_rover/models/ZED2.dae"/>
       </geometry>
     </visual>
     <collision>
       <geometry>
-        <mesh filename="/home/aditi/ERC/leo_rover/models/ZED2.dae"/>
+        <mesh filename="/home/akshat/ros2_ws/src/leo_rover/models/ZED2.dae"/>
       </geometry>
     </collision>
   </link>
@@ -461,7 +461,7 @@
           <center>0.5 0.5</center>
         </distortion>
       </camera>
-      <plugin filename="libgazebo_ros_camera.so" name="camera_controller">
+      <plugin filename="/opt/ros/humble/lib/libgazebo_ros_camera.so" name="camera_controller">
         <robotNamespace>/</robotNamespace>
         <cameraName>camera</cameraName>
         <imageTopicName>image_raw</imageTopicName>
@@ -477,7 +477,7 @@
   </gazebo>
   <!-- rocker differential -->
   <gazebo>
-    <plugin filename="libgazebo_ros_diff_drive.so" name="skid_steer_drive_controller">
+    <plugin filename="/opt/ros/humble/lib/libgazebo_ros_diff_drive.so" name="skid_steer_drive_controller">
       <num_wheel_pairs>2</num_wheel_pairs>
       <left_joint>wheel_FL_joint</left_joint>
       <left_joint>wheel_RL_joint</left_joint>
@@ -544,7 +544,7 @@
             </z>
           </linear_acceleration>
         </imu>
-        <plugin name="bytes_imu" filename="libgazebo_ros_imu_sensor.so">
+        <plugin name="bytes_imu" filename="/opt/ros/humble/lib/libgazebo_ros_imu_sensor.so">
             <ros>
                 <namespace>imu</namespace>
                 <remapping>~/out:=data_raw</remapping>
@@ -556,7 +556,7 @@
   </gazebo>
   <!-- ros_control plugin -->
   <gazebo>
-    <plugin filename="libgazebo_ros_control.so" name="gazebo_ros_control">
+    <plugin filename="/opt/ros/humble/lib/libgazebo_ros2_control.so" name="gazebo_ros_control">
       <robotNamespace>/</robotNamespace>
       <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
     </plugin>
@@ -648,7 +648,7 @@
           <center>0.5 0.5</center>
         </distortion>
       </camera>
-      <plugin filename="libgazebo_ros_camera.so" name="camera_controller2">
+      <plugin filename="/opt/ros/humble/lib/libgazebo_ros_camera.so" name="camera_controller2">
         <robotNamespace>/</robotNamespace>
         <cameraName>zed2/left_raw</cameraName>
         <imageTopicName>image_raw_color</imageTopicName>
@@ -687,7 +687,7 @@
           <stddev>0.007</stddev>
         </noise>
       </camera>
-      <plugin filename="libgazebo_ros_camera.so" name="camera_controller3">
+      <plugin filename="/opt/ros/humble/lib/libgazebo_ros_camera.so" name="camera_controller3">
         <robotNamespace>/</robotNamespace>
         <cameraName>zed2</cameraName>
         <imageTopicName>left/image_rect_color</imageTopicName>
@@ -738,7 +738,7 @@
           <center>0.5 0.5</center>
         </distortion>
       </camera>
-      <plugin filename="libgazebo_ros_camera.so" name="camera_controller4">
+      <plugin filename="/opt/ros/humble/lib/libgazebo_ros_camera.so" name="camera_controller4">
         <robotNamespace>/</robotNamespace>
         <cameraName>zed2/right_raw</cameraName>
         <imageTopicName>image_raw_color</imageTopicName>
@@ -777,7 +777,7 @@
           <stddev>0.007</stddev>
         </noise>
       </camera>
-      <plugin filename="libgazebo_ros_camera.so" name="camera_controller5">
+      <plugin filename="/opt/ros/humble/lib/libgazebo_ros_camera.so" name="camera_controller5">
         <robotNamespace>/</robotNamespace>
         <cameraName>zed2/right</cameraName>
         <imageTopicName>image_rect_color</imageTopicName>
@@ -794,7 +794,7 @@
   <gazebo reference="zed2_left_camera_frame">
     <sensor name="zed2_imu_sensor" type="imu">
       <update_rate>100</update_rate>
-      <plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin2">
+      <plugin filename="/opt/ros/humble/lib/libgazebo_ros_imu_sensor.so" name="imu_plugin2">
         <robotNamespace>/</robotNamespace>
         <topicName>zed2/imu/data</topicName>
         <frameName>zed2_imu_link</frameName>
@@ -808,7 +808,7 @@
     </sensor>
   </gazebo>
   <gazebo>
-    <plugin filename="libgazebo_ros_p3d.so" name="ground_truth">
+    <plugin filename="/opt/ros/humble/lib/libgazebo_ros_p3d.so" name="ground_truth">
       <robotNamespace>/</robotNamespace>
       <frameName>map</frameName>
       <bodyName>base_footprint</bodyName>

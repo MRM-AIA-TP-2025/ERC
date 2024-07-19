@@ -11,7 +11,7 @@ setup(
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
     ],
-    install_requires=[
+     install_requires=[
         'setuptools',
         'rclpy',
         'opencv-python',
@@ -20,8 +20,8 @@ setup(
         'cv_bridge',
     ],
     zip_safe=True,
-    maintainer='aditi',
-    maintainer_email='aditi.pers@gmail.com',
+    maintainer='akshat',
+    maintainer_email='akshat@todo.todo',
     description='TODO: Package description',
     license='TODO: License declaration',
     tests_require=['pytest'],
@@ -34,10 +34,10 @@ setup(
             'cmd_vel_relay = leo_nodes.cmd_vel_relay:main',
             'zed2_imu_transform_publisher = leo_nodes.zed2_imu_transform_publisher:main',
             'navigation_controller = leo_nodes.navigation_control:main',
-            'odom_offset_node = leo_nodes.odom_offset_node:main',  # Add this line
+            'controller = leo_nodes.controller:main',
+            'odom_offset_node = leo_nodes.odom_offset_node:main', 
             'aruco = leo_nodes.aruco:main',
-            'goal_setter_node=leo_nodes.goal_setter_node:main',
         ],
+
     },
 )
-

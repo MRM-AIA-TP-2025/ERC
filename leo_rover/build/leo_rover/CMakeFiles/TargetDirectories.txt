@@ -1,9 +1,0 @@
-/home/aditi/ERC/leo_rover/build/leo_rover/CMakeFiles/uninstall.dir
-/home/aditi/ERC/leo_rover/build/leo_rover/CMakeFiles/leo_rover_uninstall.dir
-/home/aditi/ERC/leo_rover/build/leo_rover/CMakeFiles/test.dir
-/home/aditi/ERC/leo_rover/build/leo_rover/CMakeFiles/edit_cache.dir
-/home/aditi/ERC/leo_rover/build/leo_rover/CMakeFiles/rebuild_cache.dir
-/home/aditi/ERC/leo_rover/build/leo_rover/CMakeFiles/list_install_components.dir
-/home/aditi/ERC/leo_rover/build/leo_rover/CMakeFiles/install.dir
-/home/aditi/ERC/leo_rover/build/leo_rover/CMakeFiles/install/local.dir
-/home/aditi/ERC/leo_rover/build/leo_rover/CMakeFiles/install/strip.dir

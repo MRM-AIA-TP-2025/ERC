@@ -1,89 +1,118 @@
 import rclpy
-from rclpy.action import ActionClient
 from rclpy.node import Node
-from nav2_msgs.action import NavigateToPose
-
-class SimpleNavigator(Node):
-
+from geometry_msgs.msg import PoseStamped
+from tf2_ros import TransformListener, Buffer
+import tf2_geometry_msgs
+from std_msgs.msg import Empty
+#1,4,5,12,13,8
+class GoalSetterNode(Node):
     def __init__(self):
-        super().__init__('simple_navigator')
+        super().__init__('ground_truth_filter')
+        
+        # List of goals defined as arrays
+        self.goals = [
+            {"position": {"x": -12.085, "y": 9.0, "z": 0.0}, "orientation": {"x": 0.0, "y": 0.0, "z": -0.154, "w": 1.0}},
+            {"position": {"x": -9.689, "y": 9.105, "z": 0.0}, "orientation": {"x": 0.0, "y": 0.0, "z": -0.154, "w": 1.0}},
+            {"position": {"x": -7.246, "y": 9.765, "z": 0.0}, "orientation": {"x": 0.0, "y": 0.0, "z": -0.154, "w": 1.0}},
+            {"position": {"x": -4.2538, "y": 10.7378, "z": 0.0}, "orientation": {"x": 0.0, "y": 0.0, "z": -0.154, "w": 1.0}},
+            {"position": {"x": -3.003, "y": 6.586, "z": 0.0}, "orientation": {"x": 0.0, "y": 0.0, "z": -0.154, "w": 1.0}},
+            {"position": {"x": -0.328, "y": 4.391, "z": 0.0}, "orientation": {"x": 0.0, "y": 0.0, "z": -0.154, "w": 1.0}},
+            {"position": {"x": 3.435, "y": 4.614, "z": 0.0}, "orientation": {"x": 0.0, "y": 0.0, "z": -0.154, "w": 1.0}},
+            {"position": {"x": 5.929, "y": 4.032, "z": 0.0}, "orientation": {"x": 0.0, "y": 0.0, "z": -0.154, "w": 1.0}},
+            {"position": {"x": 5.845, "y": 5.306, "z": 0.0}, "orientation": {"x": 0.0, "y": 0.0, "z": 0.7, "w": 0.713}},
+            {"position": {"x": 6.425, "y": 6.425, "z": 0.0}, "orientation": {"x": 0.0, "y": 0.0, "z": 0.807, "w": 0.589}},
+            {"position": {"x": 6.518, "y": 8.456, "z": 0.0}, "orientation": {"x": 0.0, "y": 0.0, "z": 0.687,"w": 0.726}},
+            {"position": {"x": 8.376, "y": 11.457, "z": 0.0}, "orientation": {"x": 0.0, "y": 0.0, "z": 0.687,"w": 0.726}},
+            {"position": {"x": 5.742, "y": 4.035, "z": 0.0}, "orientation": {"x": 0.0, "y": 0.0, "z": -0.856,"w": 0.516}},
+            {"position": {"x": -0.4238, "y": -6.9421, "z": 0.0}, "orientation": {"x": 0.0, "y": 0.0, "z": -0.8832,"w": 0.4689}},
+            {"position": {"x": -6.3938, "y": -11.45, "z": 0.0}, "orientation": {"x": 0.0, "y": 0.0, "z": -0.8832,"w": 0.4689}},
+            {"position": {"x": -2.169, "y": -2.884, "z": 0.0}, "orientation": {"x": 0.0, "y": 0.0, "z": 0.610,"w": 0.792}},
+            {"position": {"x": -1.44206, "y": 5.2585, "z": 0.0}, "orientation": {"x": 0.0, "y": 0.0, "z": 0.95162 ,"w": 0.3073}},
+            {"position": {"x": -17.0038, "y": 7.6178, "z": 0.0}, "orientation": {"x": 0.0, "y": 0.0, "z": 1.0 ,"w": 0.0}},
+        ]
 
-        self._action_client = ActionClient(
-            self, NavigateToPose, '/navigate_to_pose')
+        self.probe_drop_goals = [3, 11, 13, 14] 
+        self.current_goal_index = 0
+        
+        # Publisher for sending goals to Nav2
+        self.goal_pub = self.create_publisher(PoseStamped, '/goal_pose', 10)
+        
+        # Publisher for dropping probes
+        self.drop_pub = self.create_publisher(Empty, 'probe_deployment_unit/drop', 10)
+        
+        # TF Buffer and Listener
+        self.tf_buffer = Buffer()
+        self.tf_listener = TransformListener(self.tf_buffer, self)
+        
+        self.timer = self.create_timer(5.0, self.send_next_goal)
+        
+    def send_next_goal(self):
+        self.check_goal_reached()
+        if self.current_goal_index < len(self.goals):
+            goal = self.goals[self.current_goal_index]
+            
+            goal_msg = PoseStamped()
+            goal_msg.header.frame_id = 'map'  
+            goal_msg.pose.position.x = goal['position']['x']
+            goal_msg.pose.position.y = goal['position']['y']
+            goal_msg.pose.position.z = goal['position']['z']
+            goal_msg.pose.orientation.x = goal['orientation']['x']
+            goal_msg.pose.orientation.y = goal['orientation']['y']
+            goal_msg.pose.orientation.z = goal['orientation']['z']
+            goal_msg.pose.orientation.w = goal['orientation']['w']
+            
+            self.goal_pub.publish(goal_msg)
+            
+            self.get_logger().info(f'Sending goal {self.current_goal_index + 1}: {goal}')
+            
+        else:
+            self.get_logger().info('No more goals to send.')
 
-        self._waiting_for_server = True
-
-        # Create a timer to periodically check for the action server (optional)
-        self._server_check_timer = self.create_timer(0.5, self._check_action_server)
-
-    def _check_action_server(self):
-        if not self._waiting_for_server:
-            return
-
-        if self._action_client.wait_for_server(timeout_sec=1.0):
-            self._waiting_for_server = False
-            self.get_logger().info('"/navigate_to_pose" action server is now available')
-            self._send_goal()
-
-    def _send_goal(self):
-        # Prompt user for goal coordinates and orientation
+    def check_goal_reached(self):
         try:
-            x = float(input("Enter the x coordinate of the goal: "))
-            y = float(input("Enter the y coordinate of the goal: "))
-            z = float(input("Enter the z coordinate of the goal: "))
-            w = float(input("Enter the w orientation of the goal: "))
-            z = float(input("Enter the z orientation of the goal: "))
-        except ValueError:
-            self.get_logger().info('Invalid input. Please enter numeric values.')
-            return
+            # Get the transform from 'odom' to 'base_footprint' (current rover location)
+            transform = self.tf_buffer.lookup_transform('odom', 'base_footprint', rclpy.time.Time(), timeout=rclpy.duration.Duration(seconds=1.0))
+            # Check if the current location is near the goal
+            current_x = transform.transform.translation.x
+            current_y = transform.transform.translation.y
+            current_z = transform.transform.translation.z
+            
+            goal = self.goals[self.current_goal_index]  
+            
+            goal_x = goal['position']['x']
+            goal_y = goal['position']['y']
+            goal_z = goal['position']['z']
+            
+            
+            distance_to_goal = ((current_x - goal_x)**2 + (current_y - goal_y)**2 + (current_z - goal_z)**2)**0.5
+            
+            if distance_to_goal < 1.8:  
+                self.get_logger().info('Goal reached!')
+                
+                if self.current_goal_index in self.probe_drop_goals:
+                    self.drop_probe()
+                    
+                    self.probe_drop_goals.remove(self.current_goal_index)
+                    self.drop_pub.publish(Empty())
+                
+                self.current_goal_index += 1
+        
+        except Exception as e:
+            self.get_logger().error(f'Failed to lookup transform: {e}')
 
-        # Define the goal pose
-        goal_pose = NavigateToPose.Goal()
-        goal_pose.pose.header.frame_id = "map"  # Replace with your map frame ID
-        goal_pose.pose.pose.position.x = x
-        goal_pose.pose.pose.position.y = y
-        goal_pose.pose.pose.position.z = z
-        goal_pose.pose.pose.orientation.w = w
-        goal_pose.pose.pose.orientation.z = z
+    def drop_probe(self):
+        self.get_logger().info('Dropping probe...')
+        
 
-        send_goal_future = self._action_client.send_goal_async(goal_pose)
-
-        try:
-            rclpy.spin_until_future_complete(self, send_goal_future)
-
-            goal_handle = send_goal_future.result()
-            if not goal_handle.accepted:
-                self.get_logger().info('Goal was rejected by the action server')
-            else:
-                self.get_logger().info('Goal accepted by the action server')
-                self._wait_for_result(goal_handle)
-
-        except KeyboardInterrupt:
-            self.get_logger().info('Interrupted by user')
-            send_goal_future.cancel()
-
-    def _wait_for_result(self, goal_handle):
-        while rclpy.ok():
-            future = goal_handle.get_result_async()
-            rclpy.spin_once(self)  # Spin to allow callbacks to run
-
-            if future.done():
-                try:
-                    result = future.result()
-                except RuntimeError as ex:
-                    self.get_logger().info('Goal was aborted: {}'.format(ex))
-                    break
-                else:
-                    if result.result:
-                        self.get_logger().info('Goal succeeded!')
-                    else:
-                        self.get_logger().info('Goal failed with result: {}'.format(result.reason))
-                    break
-
-def main():
-    rclpy.init()
-    navigator = SimpleNavigator()
-    rclpy.spin(navigator)
+def main(args=None):
+    rclpy.init(args=args)
+    node = GoalSetterNode()
+    try:
+        rclpy.spin(node)
+    except KeyboardInterrupt:
+        pass
+    
+    node.destroy_node()
     rclpy.shutdown()
 
 if __name__ == '__main__':
