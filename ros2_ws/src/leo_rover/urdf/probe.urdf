@@ -12,12 +12,12 @@
     </inertial>
     <visual>
       <geometry>
-        <mesh filename="/home/dillon/myROS2WS/src/leo_rover/models/Probe.dae"/>
+        <mesh filename="/home/akshat/myROS2WS/src/leo_rover/models/Probe.dae"/>
       </geometry>
     </visual>
     <collision>
       <geometry>
-        <mesh filename="/home/dillon/myROS2WS/src/leo_rover/models/Probe.dae"/>
+        <mesh filename="/home/akshat/myROS2WS/src/leo_rover/models/Probe.dae"/>
       </geometry>
     </collision>
   </link>

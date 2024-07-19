@@ -27,6 +27,9 @@ class OdomCorrectionNode(Node):
         self.tvec = None
         self.tag_id = None
 
+        # Placeholder for the latest offset
+        self.offset = np.zeros(3)  # Default to zero offset
+
         # Subscribe to /odom_unfiltered
         self.subscription = self.create_subscription(
             Odometry,
@@ -46,56 +49,47 @@ class OdomCorrectionNode(Node):
         self.publisher = self.create_publisher(Odometry, '/odom', 10)
 
     def tvec_callback(self, msg):
-        
         self.tag_id = int(msg.data[0])
         self.tvec = np.array(msg.data[1:])
 
+        if self.tag_id in self.known_tag_poses:
+            self.calculate_offset(self.tvec, self.tag_id)
+
+    def calculate_offset(self, tvec, tag_id):
+        if self.current_odom is not None:
+            rover_pos = np.array([
+                self.current_odom.pose.pose.position.x,
+                self.current_odom.pose.pose.position.y,
+                self.current_odom.pose.pose.position.z
+            ])
+
+            calculated_tag_pos = rover_pos + tvec
+            known_tag_pose = self.known_tag_poses[tag_id]
+            self.offset = known_tag_pose - calculated_tag_pos
+
     def odom_callback(self, msg):
         self.current_odom = msg
-        
-        if self.tvec is not None and self.tag_id in self.known_tag_poses:
-            self.correct_odom(self.tvec, self.tag_id)
-        else:
-            # No Aruco detected or unknown tag ID, publish unfiltered odometry directly
-            self.publisher.publish(self.current_odom)
 
-    def correct_odom(self, tvec, tag_id):
-        
-        rover_pos = np.array([
+        self.apply_offset_and_publish()
+
+    def apply_offset_and_publish(self):
+        corrected_pos = np.array([
             self.current_odom.pose.pose.position.x,
             self.current_odom.pose.pose.position.y,
             self.current_odom.pose.pose.position.z
-        ])
+        ]) + self.offset
 
-       
-        calculated_tag_pos = rover_pos + tvec
+        corrected_odom = Odometry()
+        corrected_odom.header = self.current_odom.header
+        corrected_odom.child_frame_id = self.current_odom.child_frame_id
+        corrected_odom.pose.pose.position.x = corrected_pos[0]
+        corrected_odom.pose.pose.position.y = corrected_pos[1]
+        corrected_odom.pose.pose.position.z = corrected_pos[2]
+        corrected_odom.pose.pose.orientation = self.current_odom.pose.pose.orientation
+        corrected_odom.pose.covariance = self.current_odom.pose.covariance
+        corrected_odom.twist = self.current_odom.twist
 
-       
-        known_tag_pose = self.known_tag_poses[tag_id]
-
-       
-        offset = known_tag_pose - calculated_tag_pos
-
-        # Check if the offset magnitude is greater than 2
-        if np.linalg.norm(offset) > 2:
-            
-            corrected_pos = rover_pos + offset
-
-            
-            corrected_odom = Odometry()
-            corrected_odom.header = self.current_odom.header
-            corrected_odom.child_frame_id = self.current_odom.child_frame_id
-            corrected_odom.pose.pose.position.x = corrected_pos[0]
-            corrected_odom.pose.pose.position.y = corrected_pos[1]
-            corrected_odom.pose.pose.position.z = corrected_pos[2]
-            corrected_odom.pose.pose.orientation = self.current_odom.pose.pose.orientation
-            corrected_odom.pose.covariance = self.current_odom.pose.covariance
-            corrected_odom.twist = self.current_odom.twist
-
-            self.publisher.publish(corrected_odom)
-        else:
-            # Offset is not significant, publish unfiltered odometry directly
-            self.publisher.publish(self.current_odom)
+        self.publisher.publish(corrected_odom)
 
 def main(args=None):
     rclpy.init(args=args)

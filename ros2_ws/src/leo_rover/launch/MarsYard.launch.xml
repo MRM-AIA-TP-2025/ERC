@@ -1,6 +1,6 @@
 <launch>
     <arg name="pkg_gazebo_ros" default="$(find-pkg-share gazebo_ros)" />
-    <arg name="leo_rover_package" default="/home/dillon/myROS2WS/src/leo_rover" />
+    <arg name="leo_rover_package" default="/home/akshat/myROS2WS/src/leo_rover" />
     <arg name="model" default="$(var leo_rover_package)/urdf/leo_erc_sim.urdf" />
 
     <!-- Set the path to the world file -->
@@ -42,6 +42,8 @@
       <param name="Rtabmap/PublishOccupancyGrid" value="true"/>
       <param name="use_sim_time" value="true" />
       <param name="subscribe_imu" value="true"/>
+      <param name="sync_queue_size" value="20"/>
+      <param name="topic_queue_size" value="10"/>
     </node>
 
     <!-- Navigation stack -->
@@ -52,7 +54,7 @@
     </include>
 
     <!-- RVIZ2 -->
-    <node name="rviz" pkg="rviz2" exec="rviz2"  args="-d /home/dillon/myROS2WS/src/leo_rover/config/nav.rviz">
+    <node name="rviz" pkg="rviz2" exec="rviz2"  args="-d /home/akshat/myROS2WS/src/leo_rover/config/nav.rviz">
       <param name="use_sim_time" value="true" />
     </node>
 
@@ -105,7 +107,7 @@
   </node>
 
   <node
-    pkg="leo_nodes"
+    pkg="leo_rover"
     exec="odom_offset_node"
     name="odom_offset_node"
     output="screen">
@@ -118,5 +120,4 @@
     output="screen"
     launch-prefix="gnome-terminal --">
   </node>
-
 </launch>

@@ -35,9 +35,9 @@ setup(
             'zed2_imu_transform_publisher = leo_nodes.zed2_imu_transform_publisher:main',
             'navigation_controller = leo_nodes.navigation_control:main',
             'controller = leo_nodes.controller:main',
+            'odom_offset_node = leo_nodes.odom_offset_node:main', 
             'aruco = leo_nodes.aruco:main',
-            'odom_offset_node = leo_nodes.odom_offset_node:main',
         ],
-
     },
 )
+

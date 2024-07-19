@@ -7,10 +7,30 @@ endif()
 
 # find dependencies
 find_package(ament_cmake REQUIRED)
-find_package(urdf REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(nav_msgs REQUIRED)
+find_package(std_msgs REQUIRED)
+find_package(geometry_msgs REQUIRED)
+find_package(tf2 REQUIRED)
+find_package(tf2_ros REQUIRED)
+find_package(tf2_geometry_msgs REQUIRED)
+
+
+add_executable(odom_offset_node src/odom_offset_node.cpp)
 # uncomment the following section in order to fill in
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
+
+
+ament_target_dependencies(odom_offset_node
+  rclcpp
+  nav_msgs
+  std_msgs
+  geometry_msgs
+  tf2
+  tf2_ros
+  tf2_geometry_msgs
+)
 
 ament_export_dependencies(urdf)
 ament_export_dependencies(rclcpp)
@@ -18,5 +38,9 @@ ament_export_dependencies(rclcpp)
 install(DIRECTORY config launch maps media params worlds urdf models
   DESTINATION share/${PROJECT_NAME}
 )
+
+install(TARGETS
+  odom_offset_node
+  DESTINATION lib/${PROJECT_NAME})
 
 ament_package()
